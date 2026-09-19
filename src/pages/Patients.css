@@ -1,0 +1,41 @@
+.patients-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.patient-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.patient-avatar-mini {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: var(--secondary-accent-light);
+  color: var(--secondary-accent);
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--secondary-accent);
+}
+
+.contact-cell, .address-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cell-icon {
+  font-size: 0.75rem;
+  color: var(--text-light);
+}
+
+.action-buttons-group {
+  display: inline-flex;
+  gap: 0.5rem;
+}
