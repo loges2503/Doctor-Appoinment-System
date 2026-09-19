@@ -1,0 +1,174 @@
+.profile-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.profile-content-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .profile-content-grid {
+    grid-template-columns: 320px 1fr;
+  }
+}
+
+.profile-main-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2.25rem 1.5rem;
+}
+
+.profile-avatar-wrapper {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  margin-bottom: 1.25rem;
+}
+
+.profile-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--primary-accent-light);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.profile-active-badge {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--color-success);
+  border: 3px solid #FFFFFF;
+}
+
+.profile-name {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+}
+
+.profile-designation {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--primary-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.profile-id-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 1.25rem;
+  padding: 0.4rem 0.875rem;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  font-size: 0.8125rem;
+  color: var(--text-main);
+}
+
+.id-icon {
+  color: var(--secondary-accent);
+}
+
+.profile-details-card {
+  padding: 2rem;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .details-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detail-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.item-icon {
+  color: var(--primary-accent);
+}
+
+.detail-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.highlight-id {
+  color: var(--primary-accent);
+  font-family: monospace;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.locked-tag {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  background-color: #F1F5F9;
+  color: #6B7280;
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: sans-serif;
+}
+
+.admin-id-locked-banner {
+  background-color: var(--bg-secondary);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1.25rem;
+}

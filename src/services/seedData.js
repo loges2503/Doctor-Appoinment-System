@@ -1,11 +1,16 @@
 export const SAMPLE_ADMINS = [
   {
-    id: "adm-1",
+    id: "ADM1001",
     username: "admin",
-    password: "admin123",
+    password: "Admin@123",
     name: "Sarah Jenkins",
-    role: "Head Receptionist",
-    email: "admin@mediCare.com",
+    role: "Administrator",
+    designation: "Chief Administrator",
+    clinicName: "MediCare Clinic & Hospital",
+    email: "admin@medicare.com",
+    phone: "9876543210",
+    address: "742 Healthcare Boulevard, Suite 100",
+    dateJoined: "2024-01-15",
     avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=250&q=80"
   }
 ];

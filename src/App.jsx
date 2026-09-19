@@ -4,10 +4,13 @@ import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Layout } from './components/layout/Layout';
 import { Login } from './pages/Login';
+import { Register } from './pages/Register';
 import { Dashboard } from './pages/Dashboard';
 import { Doctors } from './pages/Doctors';
 import { Patients } from './pages/Patients';
 import { Appointments } from './pages/Appointments';
+import { Notifications } from './pages/Notifications';
+import { Profile } from './pages/Profile';
 import './styles/globals.css';
 
 // Protected Route Guard
@@ -61,6 +64,7 @@ export const App = () => {
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
           <Route
             path="/"
@@ -75,6 +79,8 @@ export const App = () => {
             <Route path="doctors" element={<Doctors />} />
             <Route path="patients" element={<Patients />} />
             <Route path="appointments" element={<Appointments />} />
+            <Route path="notifications" element={<Notifications />} />
+            <Route path="profile" element={<Profile />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/dashboard" replace />} />

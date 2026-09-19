@@ -5,8 +5,10 @@ import {
   FaUserMd,
   FaUserInjured,
   FaCalendarCheck,
+  FaUserCog,
   FaShieldAlt,
-  FaTimes
+  FaTimes,
+  FaBell
 } from 'react-icons/fa';
 import './Sidebar.css';
 
@@ -31,6 +33,16 @@ export const Sidebar = ({ isOpen, onCloseMobile }) => {
       path: '/appointments',
       label: 'Appointments',
       icon: <FaCalendarCheck />
+    },
+    {
+      path: '/notifications',
+      label: 'Notifications',
+      icon: <FaBell />
+    },
+    {
+      path: '/profile',
+      label: 'Admin Profile',
+      icon: <FaUserCog />
     }
   ];
 
@@ -71,9 +83,9 @@ export const Sidebar = ({ isOpen, onCloseMobile }) => {
         <div className="sidebar-footer">
           <div className="system-status-card">
             <div className="status-indicator">
-              <span className="pulse-dot"></span> System Ready
+              <span className="pulse-dot"></span> System Active
             </div>
-            <p className="status-desc">LocalStorage active & synchronized.</p>
+            <p className="status-desc">LocalStorage synchronized.</p>
           </div>
         </div>
       </aside>

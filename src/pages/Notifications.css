@@ -1,0 +1,83 @@
+.notifications-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.notifications-empty-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 1.5rem;
+  background-color: #FFFFFF;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.bell-illustration-wrapper {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-accent-light), var(--secondary-accent-light));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.bell-illustration-icon {
+  font-size: 2.75rem;
+  color: var(--primary-accent);
+}
+
+.bell-pulse-ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px dashed var(--primary-accent);
+  opacity: 0.35;
+  animation: spin 20s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.notifications-empty-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+}
+
+.notifications-empty-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  max-width: 440px;
+  margin-bottom: 2rem;
+}
+
+.notification-future-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 0.625rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  max-width: 520px;
+}
+
+.info-icon {
+  color: var(--primary-accent);
+  font-size: 1rem;
+  flex-shrink: 0;
+}

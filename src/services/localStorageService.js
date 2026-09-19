@@ -52,23 +52,119 @@ const setCollection = (key, items) => {
 export const getAdmins = () => getCollection(KEYS.ADMINS);
 
 export const authenticateAdmin = (username, password) => {
+  initializeLocalStorage(); // Ensure default admin exists if empty
   const admins = getAdmins();
   const found = admins.find(
     (a) => a.username.toLowerCase() === username.trim().toLowerCase() && a.password === password
   );
+  
   if (found) {
     const sessionData = {
       id: found.id,
       username: found.username,
       name: found.name,
-      role: found.role,
-      avatar: found.avatar,
+      role: found.role || "Administrator",
+      designation: found.designation || "Administrator",
+      clinicName: found.clinicName || "MediCare Clinic & Hospital",
+      email: found.email || "",
+      phone: found.phone || "",
+      address: found.address || "",
+      dateJoined: found.dateJoined || new Date().toISOString().split('T')[0],
+      avatar: found.avatar || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=250&q=80",
       loginTime: new Date().toISOString()
     };
     localStorage.setItem(KEYS.SESSION, JSON.stringify(sessionData));
     return { success: true, user: sessionData };
   }
   return { success: false, message: 'Invalid username or password' };
+};
+
+export const registerAdmin = (formData) => {
+  const admins = getAdmins();
+  const cleanUsername = formData.username.trim().toLowerCase();
+  const cleanEmail = formData.email.trim().toLowerCase();
+
+  // Check unique username
+  const usernameExists = admins.some((a) => a.username.toLowerCase() === cleanUsername);
+  if (usernameExists) {
+    throw new Error('Username is already taken. Please choose another.');
+  }
+
+  // Check unique email
+  const emailExists = admins.some((a) => a.email && a.email.toLowerCase() === cleanEmail);
+  if (emailExists) {
+    throw new Error('Email address is already registered.');
+  }
+
+  // Generate unique Admin ID (ADM1001, ADM1002, etc.)
+  const nextIdNum = 1000 + admins.length + 1;
+  const newAdminId = `ADM${nextIdNum}`;
+
+  const newAdmin = {
+    id: newAdminId,
+    username: formData.username.trim(),
+    password: formData.password,
+    name: formData.name.trim(),
+    email: formData.email.trim(),
+    phone: formData.phone.trim(),
+    role: "Administrator",
+    designation: "Administrator",
+    clinicName: "MediCare Clinic & Hospital",
+    address: "Clinic Central Office",
+    dateJoined: new Date().toISOString().split('T')[0],
+    avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=250&q=80"
+  };
+
+  admins.push(newAdmin);
+  setCollection(KEYS.ADMINS, admins);
+  return newAdmin;
+};
+
+export const updateAdminProfile = (adminId, updatedFields) => {
+  const admins = getAdmins();
+  const index = admins.findIndex((a) => a.id === adminId);
+  
+  if (index === -1) {
+    throw new Error('Admin account not found.');
+  }
+
+  // Admin ID is locked and cannot be changed
+  const updatedAdmin = {
+    ...admins[index],
+    name: updatedFields.name ? updatedFields.name.trim() : admins[index].name,
+    email: updatedFields.email ? updatedFields.email.trim() : admins[index].email,
+    phone: updatedFields.phone ? updatedFields.phone.trim() : admins[index].phone,
+    clinicName: updatedFields.clinicName ? updatedFields.clinicName.trim() : admins[index].clinicName,
+    address: updatedFields.address ? updatedFields.address.trim() : admins[index].address,
+    avatar: updatedFields.avatar ? updatedFields.avatar.trim() : admins[index].avatar
+  };
+
+  admins[index] = updatedAdmin;
+  setCollection(KEYS.ADMINS, admins);
+
+  // Sync active session if it's the current logged in admin
+  const activeSession = getActiveAdminSession();
+  if (activeSession && activeSession.id === adminId) {
+    const updatedSession = {
+      ...activeSession,
+      name: updatedAdmin.name,
+      email: updatedAdmin.email,
+      phone: updatedAdmin.phone,
+      clinicName: updatedAdmin.clinicName,
+      address: updatedAdmin.address,
+      avatar: updatedAdmin.avatar
+    };
+    localStorage.setItem(KEYS.SESSION, JSON.stringify(updatedSession));
+  }
+
+  return updatedAdmin;
+};
+
+export const getAdminProfile = (adminId) => {
+  const admins = getAdmins();
+  const found = admins.find((a) => a.id === adminId);
+  if (found) return found;
+  return getActiveAdminSession();
 };
 
 export const getActiveAdminSession = () => {

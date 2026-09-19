@@ -1,4 +1,4 @@
-.login-page {
+.register-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -9,7 +9,7 @@
   overflow: hidden;
 }
 
-.login-bg-pattern {
+.register-bg-pattern {
   position: absolute;
   inset: 0;
   background-image: radial-gradient(#E2E8F0 1px, transparent 1px);
@@ -17,11 +17,11 @@
   opacity: 0.6;
 }
 
-.login-card-container {
+.register-card-container {
   position: relative;
   z-index: 10;
   width: 100%;
-  max-width: 440px;
+  max-width: 520px;
   background-color: #FFFFFF;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
@@ -29,75 +29,56 @@
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
 }
 
-.login-header {
+.register-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
 }
 
-.login-brand-icon {
-  width: 56px;
-  height: 56px;
+.register-brand-icon {
+  width: 54px;
+  height: 54px;
   border-radius: 16px;
   background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
   display: flex;
   align-items: center;
   justify-content: center;
   color: #FFFFFF;
-  font-size: 1.75rem;
-  margin: 0 auto 1rem;
+  font-size: 1.65rem;
+  margin: 0 auto 0.875rem;
   box-shadow: 0 8px 16px rgba(59, 130, 246, 0.25);
 }
 
-.login-title {
+.register-title {
   font-size: 1.35rem;
   font-weight: 800;
   color: var(--text-main);
   letter-spacing: -0.02em;
 }
 
-.login-subtitle {
+.register-subtitle {
   font-size: 0.84rem;
   color: var(--text-muted);
   margin-top: 4px;
 }
 
-.input-with-icon {
-  position: relative;
+.register-form {
   display: flex;
-  align-items: center;
+  flex-direction: column;
 }
 
-.input-icon {
-  position: absolute;
-  left: 12px;
-  color: var(--text-light);
-  font-size: 0.95rem;
-}
-
-.form-input.icon-padded {
-  padding-left: 2.4rem;
-}
-
-.login-register-prompt {
-  margin-top: 1.75rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--border-color);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.8125rem;
+.register-footer-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.84rem;
   color: var(--text-muted);
 }
 
-.register-link {
+.register-footer-link a {
   color: var(--primary-accent);
   font-weight: 700;
   text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
 }
 
-.register-link:hover {
+.register-footer-link a:hover {
   text-decoration: underline;
 }

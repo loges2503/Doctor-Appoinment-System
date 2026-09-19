@@ -1,16 +1,19 @@
 import React from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
   FaClinicMedical,
   FaBars,
   FaSignOutAlt,
   FaUserShield,
-  FaBell
+  FaBell,
+  FaUser
 } from 'react-icons/fa';
 import './Navbar.css';
 
 export const Navbar = ({ onToggleSidebar }) => {
   const { admin, logout } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <header className="navbar">
@@ -23,7 +26,7 @@ export const Navbar = ({ onToggleSidebar }) => {
           <FaBars />
         </button>
 
-        <div className="navbar-brand">
+        <Link to="/dashboard" className="navbar-brand" style={{ textDecoration: 'none' }}>
           <div className="brand-logo">
             <FaClinicMedical className="logo-icon" />
           </div>
@@ -31,16 +34,23 @@ export const Navbar = ({ onToggleSidebar }) => {
             <span className="brand-title">MediCare</span>
             <span className="brand-subtitle">Reception Hub</span>
           </div>
-        </div>
+        </Link>
       </div>
 
       <div className="navbar-right">
-        <div className="notifications-badge" title="Notifications">
+        {/* Notification Bell Button */}
+        <button
+          className="notifications-badge-btn"
+          onClick={() => navigate('/notifications')}
+          title="View Notifications"
+          aria-label="View Notifications"
+        >
           <FaBell className="bell-icon" />
           <span className="notification-dot"></span>
-        </div>
+        </button>
 
-        <div className="admin-profile-pill">
+        {/* Admin Profile Link */}
+        <Link to="/profile" className="admin-profile-pill" style={{ textDecoration: 'none' }}>
           <img
             src={
               admin?.avatar ||
@@ -50,12 +60,12 @@ export const Navbar = ({ onToggleSidebar }) => {
             className="admin-avatar"
           />
           <div className="admin-info">
-            <span className="admin-name">{admin?.name || "Receptionist"}</span>
+            <span className="admin-name">{admin?.name || "Administrator"}</span>
             <span className="admin-role">
-              <FaUserShield className="role-icon" /> {admin?.role || "Admin"}
+              <FaUserShield className="role-icon" /> {admin?.designation || admin?.role || "Admin"}
             </span>
           </div>
-        </div>
+        </Link>
 
         <button className="btn-logout" onClick={logout} title="Sign Out">
           <FaSignOutAlt />

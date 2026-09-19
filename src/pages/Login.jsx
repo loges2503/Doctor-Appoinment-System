@@ -1,26 +1,30 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
-import { FaClinicMedical, FaLock, FaUser, FaShieldAlt } from 'react-icons/fa';
+import { FaClinicMedical, FaLock, FaUser, FaUserPlus } from 'react-icons/fa';
 import './Login.css';
 
 export const Login = () => {
-  const [username, setUsername] = useState('admin');
-  const [password, setPassword] = useState('admin123');
-  const { login } = useAuth();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // Redirect to dashboard if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!username.trim() || !password) return;
+    
     if (login(username, password)) {
       navigate('/dashboard');
     }
-  };
-
-  const handleFillDemo = () => {
-    setUsername('admin');
-    setPassword('admin123');
   };
 
   return (
@@ -38,7 +42,7 @@ export const Login = () => {
             <FaClinicMedical />
           </div>
           <h2 className="login-title">MediCare Reception Portal</h2>
-          <p className="login-subtitle">Admin & Receptionist System Sign In</p>
+          <p className="login-subtitle">Admin & Receptionist Portal Sign In</p>
         </div>
 
         <form onSubmit={handleSubmit} className="login-form">
@@ -77,17 +81,11 @@ export const Login = () => {
           </button>
         </form>
 
-        <div className="demo-credentials-box">
-          <div className="demo-header">
-            <FaShieldAlt className="demo-shield" /> Default Receptionist Account
-          </div>
-          <div className="demo-info">
-            <span>Username: <strong>admin</strong></span>
-            <span>Password: <strong>admin123</strong></span>
-          </div>
-          <button type="button" className="btn-demo-fill" onClick={handleFillDemo}>
-            Autofill Demo Credentials
-          </button>
+        <div className="login-register-prompt">
+          <span>Need a new administrator account?</span>
+          <Link to="/register" className="register-link">
+            <FaUserPlus /> Register Admin
+          </Link>
         </div>
       </motion.div>
     </div>
