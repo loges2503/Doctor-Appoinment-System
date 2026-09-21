@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal } from '../common/Modal';
 import { validatePatientForm } from '../../utils/validation';
-import toast from 'react-hot-toast';
+import { notify } from '../../context/NotificationContext';
 
 export const PatientModal = ({ isOpen, onClose, onSave, patient = null }) => {
   const isEdit = !!patient;
@@ -53,7 +53,7 @@ export const PatientModal = ({ isOpen, onClose, onSave, patient = null }) => {
     const validation = validatePatientForm(formData);
     if (!validation.isValid) {
       setErrors(validation.errors);
-      toast.error('Please fix validation errors before submitting.');
+      notify.error('Please fix validation errors before submitting.', 'Validation Error');
       return;
     }
 

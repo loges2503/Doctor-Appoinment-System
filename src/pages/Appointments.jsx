@@ -25,7 +25,7 @@ import {
   FaSortAmountDown,
   FaSortAmountUp
 } from 'react-icons/fa';
-import toast from 'react-hot-toast';
+import { notify } from '../context/NotificationContext';
 import './Appointments.css';
 
 export const Appointments = () => {
@@ -101,20 +101,20 @@ export const Appointments = () => {
   const handleBookingSave = (formData) => {
     try {
       addAppointment(formData);
-      toast.success('Appointment Booked Successfully!');
+      notify.success('Appointment Booked Successfully!', 'Booking Confirmed');
       loadData();
     } catch (err) {
-      toast.error(err.message || 'Failed to book appointment.');
+      notify.error(err.message || 'Failed to book appointment.', 'Booking Error');
     }
   };
 
   const handleStatusChange = (aptId, newStatus) => {
     try {
       updateAppointmentStatus(aptId, newStatus);
-      toast.success(`Appointment ${newStatus}!`);
+      notify.success(`Appointment status updated to ${newStatus}!`, 'Status Updated');
       loadData();
     } catch (err) {
-      toast.error(err.message || 'Failed to update status.');
+      notify.error(err.message || 'Failed to update status.', 'Status Error');
     }
   };
 
@@ -145,7 +145,7 @@ export const Appointments = () => {
       handleStatusChange(confirmConfig.aptId, 'Cancelled');
     } else if (confirmConfig.action === 'DELETE') {
       deleteAppointment(confirmConfig.aptId);
-      toast.success('Appointment Deleted Successfully!');
+      notify.success('Appointment record deleted successfully!', 'Appointment Removed');
       loadData();
     }
     setIsConfirmOpen(false);
@@ -155,18 +155,18 @@ export const Appointments = () => {
   const handleExportCSV = () => {
     try {
       exportAppointmentsToCSV(filteredAppointments);
-      toast.success('CSV Export Downloaded!');
+      notify.success('CSV Export Downloaded Successfully!', 'CSV Export');
     } catch (err) {
-      toast.error(err.message || 'CSV Export Failed.');
+      notify.error(err.message || 'CSV Export Failed.', 'Export Error');
     }
   };
 
   const handleExportPDF = () => {
     try {
       exportAppointmentsToPDF(filteredAppointments);
-      toast.success('PDF Export Downloaded!');
+      notify.success('PDF Report Generated & Downloaded!', 'PDF Export');
     } catch (err) {
-      toast.error(err.message || 'PDF Export Failed.');
+      notify.error(err.message || 'PDF Export Failed.', 'Export Error');
     }
   };
 

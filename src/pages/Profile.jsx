@@ -12,10 +12,9 @@ import {
   FaCalendarAlt,
   FaIdCard,
   FaEdit,
-  FaCheckCircle,
   FaLock
 } from 'react-icons/fa';
-import toast from 'react-hot-toast';
+import { notify } from '../context/NotificationContext';
 import './Profile.css';
 
 export const Profile = () => {
@@ -91,7 +90,7 @@ export const Profile = () => {
 
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
-      toast.error('Please fix validation errors in the form.');
+      notify.error('Please fix validation errors in the form.', 'Validation Error');
       return;
     }
 

@@ -40,34 +40,34 @@ export const Register = () => {
     e.preventDefault();
     const newErrors = {};
 
-    // 1. All fields required
+    // 1. All required field validations
     if (!formData.name.trim()) newErrors.name = 'Full name is required.';
     
-    // 2. Valid email
+    // 2. Email validation
     if (!formData.email.trim()) {
       newErrors.email = 'Email address is required.';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
       newErrors.email = 'Please enter a valid email address.';
     }
 
-    // 3. Phone number exactly 10 digits
+    // 3. Phone number validation (exact 10 digits)
     if (!formData.phone.trim()) {
       newErrors.phone = 'Phone number is required.';
     } else if (!/^\d{10}$/.test(formData.phone.trim())) {
       newErrors.phone = 'Phone number must contain exactly 10 digits.';
     }
 
-    // 4. Username required
+    // 4. Username validation
     if (!formData.username.trim()) newErrors.username = 'Username is required.';
 
-    // 5. Password min 8 chars
+    // 5. Password validation (min 8 chars)
     if (!formData.password) {
       newErrors.password = 'Password is required.';
     } else if (formData.password.length < 8) {
       newErrors.password = 'Password must be at least 8 characters long.';
     }
 
-    // 6. Confirm password match
+    // 6. Confirm Password match validation
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = 'Please confirm your password.';
     } else if (formData.password !== formData.confirmPassword) {
@@ -79,9 +79,20 @@ export const Register = () => {
       return;
     }
 
-    // Submit to AuthContext register function (handles unique username & email check)
+    // Submit to register method (which checks duplicate email, phone, and username)
     const res = register(formData);
-    if (res.success) {
+    if (!res.success) {
+      const errMsg = res.message || '';
+      if (errMsg.toLowerCase().includes('email')) {
+        setErrors((prev) => ({ ...prev, email: errMsg }));
+      } else if (errMsg.toLowerCase().includes('phone')) {
+        setErrors((prev) => ({ ...prev, phone: errMsg }));
+      } else if (errMsg.toLowerCase().includes('username')) {
+        setErrors((prev) => ({ ...prev, username: errMsg }));
+      } else {
+        setErrors((prev) => ({ ...prev, general: errMsg }));
+      }
+    } else {
       navigate('/login');
     }
   };
@@ -103,6 +114,12 @@ export const Register = () => {
           <h2 className="register-title">Register Administrator</h2>
           <p className="register-subtitle">Create a new clinic receptionist/admin account</p>
         </div>
+
+        {errors.general && (
+          <div className="form-general-error">
+            {errors.general}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="register-form">
           <div className="form-group">

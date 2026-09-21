@@ -20,7 +20,7 @@ import {
   FaClock,
   FaCalendarAlt
 } from 'react-icons/fa';
-import toast from 'react-hot-toast';
+import { notify } from '../context/NotificationContext';
 import './Doctors.css';
 
 export const Doctors = () => {
@@ -46,10 +46,10 @@ export const Doctors = () => {
   const handleSaveDoctor = (formData) => {
     if (editingDoctor) {
       updateDoctor(editingDoctor.id, formData);
-      toast.success('Doctor Updated Successfully!');
+      notify.success('Doctor details updated successfully!', 'Doctor Updated');
     } else {
       addDoctor(formData);
-      toast.success('Doctor Added Successfully!');
+      notify.success('New doctor profile added successfully!', 'Doctor Added');
     }
     loadDoctors();
   };
@@ -57,7 +57,7 @@ export const Doctors = () => {
   const handleDeleteDoctorConfirm = () => {
     if (doctorToDelete) {
       deleteDoctor(doctorToDelete.id);
-      toast.success('Doctor Deleted Successfully!');
+      notify.success('Doctor profile removed successfully.', 'Doctor Deleted');
       loadDoctors();
       setDoctorToDelete(null);
     }

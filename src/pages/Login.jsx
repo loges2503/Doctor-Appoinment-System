@@ -8,6 +8,7 @@ import './Login.css';
 export const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -22,8 +23,10 @@ export const Login = () => {
     e.preventDefault();
     if (!username.trim() || !password) return;
     
-    if (login(username, password)) {
-      navigate('/dashboard');
+    // AuthContext login triggers global centered notification & updates auth state
+    const success = login(username, password);
+    if (success) {
+      navigate('/dashboard', { replace: true });
     }
   };
 

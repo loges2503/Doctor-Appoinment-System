@@ -17,7 +17,7 @@ import {
   FaEnvelope,
   FaMapMarkerAlt
 } from 'react-icons/fa';
-import toast from 'react-hot-toast';
+import { notify } from '../context/NotificationContext';
 import './Patients.css';
 
 export const Patients = () => {
@@ -40,20 +40,24 @@ export const Patients = () => {
   }, []);
 
   const handleSavePatient = (formData) => {
-    if (editingPatient) {
-      updatePatient(editingPatient.id, formData);
-      toast.success('Patient Record Updated Successfully!');
-    } else {
-      addPatient(formData);
-      toast.success('Patient Registered Successfully!');
+    try {
+      if (editingPatient) {
+        updatePatient(editingPatient.id, formData);
+        notify.success('Patient Record Updated Successfully!', 'Patient Updated');
+      } else {
+        addPatient(formData);
+        notify.success('Patient Registered Successfully!', 'Patient Registered');
+      }
+      loadPatients();
+    } catch (err) {
+      notify.error(err.message || 'Failed to save patient record.', 'Error');
     }
-    loadPatients();
   };
 
   const handleDeletePatientConfirm = () => {
     if (patientToDelete) {
       deletePatient(patientToDelete.id);
-      toast.success('Patient Record Deleted!');
+      notify.success('Patient Record Deleted!', 'Patient Removed');
       loadPatients();
       setPatientToDelete(null);
     }

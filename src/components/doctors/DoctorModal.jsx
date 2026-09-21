@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal } from '../common/Modal';
 import { SPECIALIZATIONS_LIST, DAYS_OF_WEEK, DEFAULT_TIME_SLOTS } from '../../services/seedData';
 import { validateDoctorForm } from '../../utils/validation';
-import toast from 'react-hot-toast';
+import { notify } from '../../context/NotificationContext';
 
 const PRESET_AVATARS = [
   "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=300&q=80",
@@ -97,7 +97,7 @@ export const DoctorModal = ({ isOpen, onClose, onSave, doctor = null }) => {
     const validation = validateDoctorForm(formData);
     if (!validation.isValid) {
       setErrors(validation.errors);
-      toast.error('Please fix validation errors before submitting.');
+      notify.error('Please fix validation errors before submitting.', 'Validation Error');
       return;
     }
 

@@ -31,7 +31,7 @@ import {
   Cell,
   Legend
 } from 'recharts';
-import toast from 'react-hot-toast';
+import { notify } from '../context/NotificationContext';
 import './Dashboard.css';
 
 export const Dashboard = () => {
@@ -91,10 +91,10 @@ export const Dashboard = () => {
   const handleBookingSave = (appointmentData) => {
     try {
       addAppointment(appointmentData);
-      toast.success('Appointment booked successfully!');
+      notify.success('Appointment booked successfully!', 'Booking Confirmed');
       loadDashboardData();
     } catch (err) {
-      toast.error(err.message || 'Failed to book appointment.');
+      notify.error(err.message || 'Failed to book appointment.', 'Booking Failed');
     }
   };
 

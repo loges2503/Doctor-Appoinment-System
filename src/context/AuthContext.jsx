@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import toast from 'react-hot-toast';
+import { notify } from './NotificationContext';
 import {
   initializeLocalStorage,
   authenticateAdmin,
@@ -31,24 +31,11 @@ export const AuthProvider = ({ children }) => {
     const res = authenticateAdmin(username, password);
     if (res.success) {
       setAdmin(res.user);
-      toast.success('Login Successful! Welcome back.', {
-        style: {
-          borderRadius: '12px',
-          background: '#1F2937',
-          color: '#fff',
-          fontWeight: 600
-        }
-      });
+      // Trigger centered notification for successful login
+      notify.success('Welcome back! You have logged in successfully.', 'Login Successful');
       return true;
     } else {
-      toast.error(res.message || 'Login Failed. Invalid credentials.', {
-        style: {
-          borderRadius: '12px',
-          background: '#EF4444',
-          color: '#fff',
-          fontWeight: 600
-        }
-      });
+      notify.error(res.message || 'Invalid username or password.', 'Login Failed');
       return false;
     }
   };
@@ -56,24 +43,10 @@ export const AuthProvider = ({ children }) => {
   const register = (formData) => {
     try {
       const newAdmin = registerAdmin(formData);
-      toast.success('Registration successful! You can now log in.', {
-        style: {
-          borderRadius: '12px',
-          background: '#22C55E',
-          color: '#fff',
-          fontWeight: 600
-        }
-      });
+      notify.success('Registration successful! You can now log in.', 'Account Created');
       return { success: true, admin: newAdmin };
     } catch (err) {
-      toast.error(err.message || 'Registration failed.', {
-        style: {
-          borderRadius: '12px',
-          background: '#EF4444',
-          color: '#fff',
-          fontWeight: 600
-        }
-      });
+      notify.error(err.message || 'Registration failed.', 'Registration Error');
       return { success: false, message: err.message };
     }
   };
@@ -91,10 +64,10 @@ export const AuthProvider = ({ children }) => {
         address: updatedAdmin.address,
         avatar: updatedAdmin.avatar
       }));
-      toast.success('Admin Profile Updated Successfully!');
+      notify.success('Admin profile updated successfully!', 'Profile Updated');
       return true;
     } catch (err) {
-      toast.error(err.message || 'Failed to update profile.');
+      notify.error(err.message || 'Failed to update profile.', 'Update Error');
       return false;
     }
   };
@@ -102,7 +75,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     clearAdminSession();
     setAdmin(null);
-    toast.success('Logged out successfully.');
+    notify.info('Logged out successfully.', 'Signed Out');
   };
 
   return (

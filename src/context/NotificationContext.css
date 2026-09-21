@@ -1,0 +1,121 @@
+.centered-notification-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background-color: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.centered-notification-card {
+  width: 100%;
+  max-width: 400px;
+  background-color: #FFFFFF;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+  padding: 2.25rem 2rem 1.75rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  margin: auto;
+  cursor: pointer;
+}
+
+.notify-icon-wrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+}
+
+.wrapper-success {
+  background-color: #DCFCE7;
+  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.25);
+}
+
+.wrapper-error {
+  background-color: #FEE2E2;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.25);
+}
+
+.wrapper-warning {
+  background-color: #FEF3C7;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);
+}
+
+.wrapper-info {
+  background-color: #EFF6FF;
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.25);
+}
+
+.notify-icon {
+  font-size: 2.5rem;
+}
+
+.notify-icon-success {
+  color: #22C55E;
+}
+
+.notify-icon-error {
+  color: #EF4444;
+}
+
+.notify-icon-warning {
+  color: #F59E0B;
+}
+
+.notify-icon-info {
+  color: #3B82F6;
+}
+
+.notify-modal-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.4rem;
+}
+
+.notify-modal-message {
+  font-size: 0.925rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin-bottom: 1.5rem;
+}
+
+.notify-progress-track {
+  width: 100%;
+  height: 4px;
+  background-color: #F1F5F9;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.notify-progress-fill {
+  height: 100%;
+  border-radius: 2px;
+}
+
+.fill-success {
+  background-color: #22C55E;
+}
+
+.fill-error {
+  background-color: #EF4444;
+}
+
+.fill-warning {
+  background-color: #F59E0B;
+}
+
+.fill-info {
+  background-color: #3B82F6;
+}

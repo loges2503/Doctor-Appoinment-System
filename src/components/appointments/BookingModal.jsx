@@ -3,7 +3,7 @@ import { Modal } from '../common/Modal';
 import { getDoctors, getPatients, getAvailableSlotsForDoctorAndDate } from '../../services/localStorageService';
 import { validateAppointmentForm } from '../../utils/validation';
 import { getTodayISOString } from '../../utils/dateUtils';
-import toast from 'react-hot-toast';
+import { notify } from '../../context/NotificationContext';
 
 export const BookingModal = ({ isOpen, onClose, onSave }) => {
   const todayStr = getTodayISOString();
@@ -77,7 +77,7 @@ export const BookingModal = ({ isOpen, onClose, onSave }) => {
     const validation = validateAppointmentForm(formData);
     if (!validation.isValid) {
       setErrors(validation.errors);
-      toast.error('Please complete all required fields.');
+      notify.error('Please complete all required fields.', 'Validation Error');
       return;
     }
 
@@ -85,7 +85,7 @@ export const BookingModal = ({ isOpen, onClose, onSave }) => {
       onSave(formData);
       onClose();
     } catch (err) {
-      toast.error(err.message || 'Failed to book appointment.');
+      notify.error(err.message || 'Failed to book appointment.', 'Booking Error');
     }
   };
 

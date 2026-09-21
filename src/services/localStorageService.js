@@ -83,17 +83,24 @@ export const registerAdmin = (formData) => {
   const admins = getAdmins();
   const cleanUsername = formData.username.trim().toLowerCase();
   const cleanEmail = formData.email.trim().toLowerCase();
+  const cleanPhone = formData.phone.trim();
 
-  // Check unique username
+  // 1. Check unique username
   const usernameExists = admins.some((a) => a.username.toLowerCase() === cleanUsername);
   if (usernameExists) {
-    throw new Error('Username is already taken. Please choose another.');
+    throw new Error('Username is already taken. Please choose another username.');
   }
 
-  // Check unique email
+  // 2. Check unique email - Requirement 2
   const emailExists = admins.some((a) => a.email && a.email.toLowerCase() === cleanEmail);
   if (emailExists) {
-    throw new Error('Email address is already registered.');
+    throw new Error('This email is already registered. Please log in or use another email address.');
+  }
+
+  // 3. Check unique phone number - Requirement 2
+  const phoneExists = admins.some((a) => a.phone && a.phone.trim() === cleanPhone);
+  if (phoneExists) {
+    throw new Error('This phone number is already registered. Please use another phone number.');
   }
 
   // Generate unique Admin ID (ADM1001, ADM1002, etc.)
@@ -126,6 +133,28 @@ export const updateAdminProfile = (adminId, updatedFields) => {
   
   if (index === -1) {
     throw new Error('Admin account not found.');
+  }
+
+  // Check email uniqueness if email changed
+  if (updatedFields.email) {
+    const cleanEmail = updatedFields.email.trim().toLowerCase();
+    const duplicateEmail = admins.some(
+      (a) => a.id !== adminId && a.email && a.email.toLowerCase() === cleanEmail
+    );
+    if (duplicateEmail) {
+      throw new Error('This email is already registered by another account.');
+    }
+  }
+
+  // Check phone uniqueness if phone changed
+  if (updatedFields.phone) {
+    const cleanPhone = updatedFields.phone.trim();
+    const duplicatePhone = admins.some(
+      (a) => a.id !== adminId && a.phone && a.phone.trim() === cleanPhone
+    );
+    if (duplicatePhone) {
+      throw new Error('This phone number is already registered by another account.');
+    }
   }
 
   // Admin ID is locked and cannot be changed
@@ -233,12 +262,20 @@ export const getPatients = () => getCollection(KEYS.PATIENTS);
 
 export const addPatient = (patientData) => {
   const patients = getPatients();
+
+  // Validate duplicate phone for patient if needed
+  const cleanPhone = patientData.phone.trim();
+  const existingPatientPhone = patients.some((p) => p.phone === cleanPhone);
+  if (existingPatientPhone) {
+    throw new Error('A patient with this phone number is already registered.');
+  }
+
   const newPatient = {
     id: `pat-${Date.now()}`,
     name: patientData.name.trim(),
     age: Number(patientData.age),
     gender: patientData.gender,
-    phone: patientData.phone.trim(),
+    phone: cleanPhone,
     email: patientData.email ? patientData.email.trim() : "",
     address: patientData.address ? patientData.address.trim() : "",
     createdAt: new Date().toISOString()
