@@ -21,7 +21,7 @@
   position: relative;
   z-index: 10;
   width: 100%;
-  max-width: 440px;
+  max-width: 460px;
   background-color: #FFFFFF;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
@@ -31,7 +31,7 @@
 
 .login-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .login-brand-icon {
@@ -49,16 +49,80 @@
 }
 
 .login-title {
-  font-size: 1.35rem;
+  font-size: 1.45rem;
   font-weight: 800;
   color: var(--text-main);
   letter-spacing: -0.02em;
 }
 
 .login-subtitle {
-  font-size: 0.84rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
   margin-top: 4px;
+}
+
+/* Automation Test Credentials Helper Card */
+.test-credentials-card {
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.credentials-card-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-main);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 0.75rem;
+}
+
+.credentials-chips-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.credential-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  padding: 0.4rem 0.65rem;
+  font-size: 0.8rem;
+  color: var(--text-main);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.credential-chip:hover {
+  border-color: var(--primary-accent);
+  background-color: var(--primary-accent-light);
+  transform: translateY(-1px);
+}
+
+.chip-icon {
+  font-size: 0.95rem;
+}
+
+.admin-icon {
+  color: #3B82F6;
+}
+
+.doctor-icon {
+  color: #14B8A6;
+}
+
+.reception-icon {
+  color: #F59E0B;
 }
 
 .input-with-icon {
@@ -72,102 +136,69 @@
   left: 12px;
   color: var(--text-light);
   font-size: 0.95rem;
+  pointer-events: none;
 }
 
 .form-input.icon-padded {
   padding-left: 2.4rem;
 }
 
-.login-register-prompt {
-  margin-top: 1.75rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--border-color);
+.form-input.right-padded {
+  padding-right: 2.6rem;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: color 0.15s ease;
+}
+
+.password-toggle-btn:hover {
+  color: var(--text-main);
+}
+
+.login-options-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.8125rem;
-  color: var(--text-muted);
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.835rem;
 }
 
-.register-link {
-  color: var(--primary-accent);
-  font-weight: 700;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.register-link:hover {
-  text-decoration: underline;
-}
-
-/* Centered Login Success Modal Overlay */
-.login-success-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 99999;
-  background-color: rgba(15, 23, 42, 0.55);
-  backdrop-filter: blur(5px);
+.remember-me-label {
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 1rem;
-}
-
-.login-success-card {
-  width: 100%;
-  max-width: 380px;
-  background: #FFFFFF;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-color);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
-  padding: 2.25rem 2rem 1.75rem;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  margin: auto;
-}
-
-.success-circle-icon {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background-color: #DCFCE7;
-  color: #22C55E;
-  font-size: 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 1.25rem;
-  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.25);
-}
-
-.success-modal-heading {
-  font-size: 1.4rem;
-  font-weight: 800;
+  gap: 8px;
   color: var(--text-main);
-  letter-spacing: -0.02em;
-  margin-bottom: 0.35rem;
+  cursor: pointer;
+  font-weight: 500;
+  user-select: none;
 }
 
-.success-modal-subtext {
-  font-size: 0.95rem;
+.remember-me-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary-accent);
+  cursor: pointer;
+}
+
+.forgot-password-link {
+  color: var(--primary-accent);
   font-weight: 600;
-  color: var(--text-muted);
-  margin-bottom: 1.5rem;
+  text-decoration: none;
 }
 
-.success-modal-timer-bar {
-  width: 100%;
-  height: 4px;
-  background-color: #F1F5F9;
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-.timer-fill {
-  height: 100%;
-  background-color: #22C55E;
-  border-radius: 2px;
+.forgot-password-link:hover {
+  text-decoration: underline;
 }

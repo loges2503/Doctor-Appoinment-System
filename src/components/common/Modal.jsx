@@ -21,9 +21,11 @@ export const Modal = ({ isOpen, onClose, title, children, maxWidth = '550px' }) 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-overlay" id="modal-overlay" data-testid="modal-overlay" onClick={onClose}>
           <motion.div
             className="modal-container"
+            id="modal-container"
+            data-testid="modal-container"
             style={{ maxWidth }}
             onClick={(e) => e.stopPropagation()}
             initial={{ opacity: 0, scale: 0.95, y: 15 }}
@@ -32,8 +34,14 @@ export const Modal = ({ isOpen, onClose, title, children, maxWidth = '550px' }) 
             transition={{ duration: 0.2, ease: 'easeOut' }}
           >
             <div className="modal-header">
-              <h3 className="modal-title">{title}</h3>
-              <button className="modal-close-btn" onClick={onClose} aria-label="Close modal">
+              <h3 className="modal-title" id="modal-title" data-testid="modal-title">{title}</h3>
+              <button
+                className="modal-close-btn"
+                id="modal-close-btn"
+                data-testid="modal-close-btn"
+                onClick={onClose}
+                aria-label="Close modal"
+              >
                 <FaTimes />
               </button>
             </div>

@@ -26,7 +26,6 @@ export const BookingModal = ({ isOpen, onClose, onSave }) => {
     if (isOpen) {
       const allPatients = getPatients();
       const allDoctors = getDoctors();
-      // Requirement: "Only show available doctors"
       const availableDocs = allDoctors.filter((d) => d.status === 'Available');
 
       setPatients(allPatients);
@@ -47,13 +46,11 @@ export const BookingModal = ({ isOpen, onClose, onSave }) => {
     }
   }, [isOpen, todayStr]);
 
-  // Recalculate available time slots whenever doctorId or date changes
   useEffect(() => {
     if (formData.doctorId && formData.date) {
       const slots = getAvailableSlotsForDoctorAndDate(formData.doctorId, formData.date);
       setAvailableSlots(slots);
       
-      // Select first available slot by default if available
       if (slots.length > 0 && !slots.includes(formData.timeSlot)) {
         setFormData((prev) => ({ ...prev, timeSlot: slots[0] }));
       } else if (slots.length === 0) {
@@ -93,19 +90,23 @@ export const BookingModal = ({ isOpen, onClose, onSave }) => {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Book New Appointment" maxWidth="560px">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} id="booking-form" data-testid="booking-form" noValidate>
         <div className="form-group">
-          <label className="form-label">Select Patient *</label>
+          <label className="form-label" htmlFor="patient-dropdown">Select Patient *</label>
           {patients.length === 0 ? (
             <div style={{ fontSize: '0.85rem', color: '#EF4444' }}>
               No patients registered. Please add a patient first.
             </div>
           ) : (
             <select
+              id="patient-dropdown"
               name="patientId"
+              data-testid="patient-dropdown"
+              aria-label="Select Patient"
               className={`form-select ${errors.patientId ? 'error' : ''}`}
               value={formData.patientId}
               onChange={handleChange}
+              required
             >
               <option value="">-- Choose Patient --</option>
               {patients.map((p) => (
@@ -115,21 +116,25 @@ export const BookingModal = ({ isOpen, onClose, onSave }) => {
               ))}
             </select>
           )}
-          {errors.patientId && <span className="error-text">{errors.patientId}</span>}
+          {errors.patientId && <span className="error-text" id="patient-id-error" data-testid="patient-id-error">{errors.patientId}</span>}
         </div>
 
         <div className="form-group">
-          <label className="form-label">Select Doctor * (Only Available Doctors Listed)</label>
+          <label className="form-label" htmlFor="doctor-dropdown">Select Doctor * (Only Available Doctors Listed)</label>
           {doctors.length === 0 ? (
             <div style={{ fontSize: '0.85rem', color: '#EF4444' }}>
               No available doctors found. (Doctors may be On Leave).
             </div>
           ) : (
             <select
+              id="doctor-dropdown"
               name="doctorId"
+              data-testid="doctor-dropdown"
+              aria-label="Select Doctor"
               className={`form-select ${errors.doctorId ? 'error' : ''}`}
               value={formData.doctorId}
               onChange={handleChange}
+              required
             >
               <option value="">-- Choose Doctor --</option>
               {doctors.map((d) => (
@@ -139,25 +144,29 @@ export const BookingModal = ({ isOpen, onClose, onSave }) => {
               ))}
             </select>
           )}
-          {errors.doctorId && <span className="error-text">{errors.doctorId}</span>}
+          {errors.doctorId && <span className="error-text" id="doctor-id-error" data-testid="doctor-id-error">{errors.doctorId}</span>}
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
           <div className="form-group">
-            <label className="form-label">Appointment Date *</label>
+            <label className="form-label" htmlFor="appointment-date">Appointment Date *</label>
             <input
               type="date"
+              id="appointment-date"
               name="date"
+              data-testid="appointment-date"
+              aria-label="Appointment Date"
               min={todayStr}
               className={`form-input ${errors.date ? 'error' : ''}`}
               value={formData.date}
               onChange={handleChange}
+              required
             />
-            {errors.date && <span className="error-text">{errors.date}</span>}
+            {errors.date && <span className="error-text" id="appointment-date-error" data-testid="appointment-date-error">{errors.date}</span>}
           </div>
 
           <div className="form-group">
-            <label className="form-label">Available Time Slots *</label>
+            <label className="form-label" htmlFor="appointment-time">Available Time Slots *</label>
             {availableSlots.length === 0 ? (
               <div style={{ fontSize: '0.8rem', color: '#B45309', padding: '0.4rem 0' }}>
                 {selectedDoctor
@@ -166,10 +175,14 @@ export const BookingModal = ({ isOpen, onClose, onSave }) => {
               </div>
             ) : (
               <select
+                id="appointment-time"
                 name="timeSlot"
+                data-testid="appointment-time"
+                aria-label="Appointment Time Slot"
                 className={`form-select ${errors.timeSlot ? 'error' : ''}`}
                 value={formData.timeSlot}
                 onChange={handleChange}
+                required
               >
                 <option value="">-- Select Time Slot --</option>
                 {availableSlots.map((slot) => (
@@ -179,30 +192,44 @@ export const BookingModal = ({ isOpen, onClose, onSave }) => {
                 ))}
               </select>
             )}
-            {errors.timeSlot && <span className="error-text">{errors.timeSlot}</span>}
+            {errors.timeSlot && <span className="error-text" id="appointment-time-error" data-testid="appointment-time-error">{errors.timeSlot}</span>}
           </div>
         </div>
 
         <div className="form-group">
-          <label className="form-label">Reason for Visit *</label>
+          <label className="form-label" htmlFor="reason-input">Reason for Visit *</label>
           <textarea
+            id="reason-input"
             name="reason"
+            data-testid="reason-input"
+            aria-label="Reason for Visit"
             rows="3"
             placeholder="e.g. General checkup, Follow-up on lab results, Chest pain"
             className={`form-textarea ${errors.reason ? 'error' : ''}`}
             value={formData.reason}
             onChange={handleChange}
+            required
           />
-          {errors.reason && <span className="error-text">{errors.reason}</span>}
+          {errors.reason && <span className="error-text" id="reason-error" data-testid="reason-error">{errors.reason}</span>}
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.5rem', borderTop: '1px solid #E2E8F0', paddingTop: '1rem' }}>
-          <button type="button" className="btn btn-outline" onClick={onClose}>
+          <button
+            type="button"
+            className="btn btn-outline"
+            id="cancel-appointment"
+            data-testid="cancel-appointment"
+            aria-label="Cancel Appointment"
+            onClick={onClose}
+          >
             Cancel
           </button>
           <button
             type="submit"
             className="btn btn-primary"
+            id="submit-appointment"
+            data-testid="submit-appointment"
+            aria-label="Submit Appointment"
             disabled={!formData.patientId || !formData.doctorId || availableSlots.length === 0}
           >
             Book Appointment

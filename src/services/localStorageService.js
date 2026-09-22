@@ -2,31 +2,19 @@ import {
   SAMPLE_ADMINS,
   SAMPLE_DOCTORS,
   SAMPLE_PATIENTS,
-  SAMPLE_APPOINTMENTS
+  SAMPLE_APPOINTMENTS,
+  SAMPLE_BILLING
 } from './seedData';
 
 const KEYS = {
+  USERS: 'users',
+  CURRENT_USER: 'currentUser',
   ADMINS: 'medi_admins',
+  SESSION: 'medi_admin_session',
   DOCTORS: 'medi_doctors',
   PATIENTS: 'medi_patients',
   APPOINTMENTS: 'medi_appointments',
-  SESSION: 'medi_admin_session'
-};
-
-// Initialize LocalStorage with seed data if empty
-export const initializeLocalStorage = () => {
-  if (!localStorage.getItem(KEYS.ADMINS)) {
-    localStorage.setItem(KEYS.ADMINS, JSON.stringify(SAMPLE_ADMINS));
-  }
-  if (!localStorage.getItem(KEYS.DOCTORS)) {
-    localStorage.setItem(KEYS.DOCTORS, JSON.stringify(SAMPLE_DOCTORS));
-  }
-  if (!localStorage.getItem(KEYS.PATIENTS)) {
-    localStorage.setItem(KEYS.PATIENTS, JSON.stringify(SAMPLE_PATIENTS));
-  }
-  if (!localStorage.getItem(KEYS.APPOINTMENTS)) {
-    localStorage.setItem(KEYS.APPOINTMENTS, JSON.stringify(SAMPLE_APPOINTMENTS));
-  }
+  BILLING: 'medi_billing'
 };
 
 // Generic Helpers
@@ -48,164 +36,161 @@ const setCollection = (key, items) => {
   }
 };
 
-// --- ADMIN & AUTH SERVICES ---
-export const getAdmins = () => getCollection(KEYS.ADMINS);
+// Initialize LocalStorage with seed data
+export const initializeLocalStorage = () => {
+  let usersData = getCollection(KEYS.USERS);
 
-export const authenticateAdmin = (username, password) => {
-  initializeLocalStorage(); // Ensure default admin exists if empty
-  const admins = getAdmins();
-  const found = admins.find(
-    (a) => a.username.toLowerCase() === username.trim().toLowerCase() && a.password === password
-  );
-  
+  if (!usersData || usersData.length === 0) {
+    setCollection(KEYS.USERS, SAMPLE_ADMINS);
+    setCollection(KEYS.ADMINS, SAMPLE_ADMINS);
+  } else {
+    // Ensure all 3 predefined test accounts (admin, doctor, reception) exist
+    let updated = false;
+    SAMPLE_ADMINS.forEach((sampleUser) => {
+      const exists = usersData.some((u) => u.username === sampleUser.username);
+      if (!exists) {
+        usersData.push(sampleUser);
+        updated = true;
+      }
+    });
+    if (updated) {
+      setCollection(KEYS.USERS, usersData);
+      setCollection(KEYS.ADMINS, usersData);
+    }
+  }
+
+  if (!localStorage.getItem(KEYS.DOCTORS)) {
+    setCollection(KEYS.DOCTORS, SAMPLE_DOCTORS);
+  }
+  if (!localStorage.getItem(KEYS.PATIENTS)) {
+    setCollection(KEYS.PATIENTS, SAMPLE_PATIENTS);
+  }
+  if (!localStorage.getItem(KEYS.APPOINTMENTS)) {
+    setCollection(KEYS.APPOINTMENTS, SAMPLE_APPOINTMENTS);
+  }
+  if (!localStorage.getItem(KEYS.BILLING)) {
+    setCollection(KEYS.BILLING, SAMPLE_BILLING);
+  }
+};
+
+// --- AUTH & USER SERVICES ---
+export const getUsers = () => {
+  initializeLocalStorage();
+  const users = getCollection(KEYS.USERS);
+  if (!users || users.length === 0) {
+    setCollection(KEYS.USERS, SAMPLE_ADMINS);
+    return SAMPLE_ADMINS;
+  }
+  return users;
+};
+
+export const getAdmins = getUsers;
+
+export const authenticateAdmin = (identifier, password) => {
+  const users = getUsers();
+  const cleanInput = (identifier || '').trim().toLowerCase();
+
+  // Match username OR email, and exact password
+  const found = users.find((u) => {
+    const matchUsername = u.username && u.username.trim().toLowerCase() === cleanInput;
+    const matchEmail = u.email && u.email.trim().toLowerCase() === cleanInput;
+    return (matchUsername || matchEmail) && u.password === password;
+  });
+
   if (found) {
     const sessionData = {
       id: found.id,
       username: found.username,
-      name: found.name,
+      fullName: found.fullName || found.name || found.username,
+      name: found.name || found.fullName || found.username,
       role: found.role || "Administrator",
       designation: found.designation || "Administrator",
       clinicName: found.clinicName || "MediCare Clinic & Hospital",
       email: found.email || "",
       phone: found.phone || "",
+      gender: found.gender || "",
+      dob: found.dob || "",
       address: found.address || "",
       dateJoined: found.dateJoined || new Date().toISOString().split('T')[0],
       avatar: found.avatar || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=250&q=80",
       loginTime: new Date().toISOString()
     };
+    
+    // Save current logged-in user to LocalStorage
+    localStorage.setItem(KEYS.CURRENT_USER, JSON.stringify(sessionData));
     localStorage.setItem(KEYS.SESSION, JSON.stringify(sessionData));
+    
     return { success: true, user: sessionData };
   }
-  return { success: false, message: 'Invalid username or password' };
-};
 
-export const registerAdmin = (formData) => {
-  const admins = getAdmins();
-  const cleanUsername = formData.username.trim().toLowerCase();
-  const cleanEmail = formData.email.trim().toLowerCase();
-  const cleanPhone = formData.phone.trim();
-
-  // 1. Check unique username
-  const usernameExists = admins.some((a) => a.username.toLowerCase() === cleanUsername);
-  if (usernameExists) {
-    throw new Error('Username is already taken. Please choose another username.');
-  }
-
-  // 2. Check unique email - Requirement 2
-  const emailExists = admins.some((a) => a.email && a.email.toLowerCase() === cleanEmail);
-  if (emailExists) {
-    throw new Error('This email is already registered. Please log in or use another email address.');
-  }
-
-  // 3. Check unique phone number - Requirement 2
-  const phoneExists = admins.some((a) => a.phone && a.phone.trim() === cleanPhone);
-  if (phoneExists) {
-    throw new Error('This phone number is already registered. Please use another phone number.');
-  }
-
-  // Generate unique Admin ID (ADM1001, ADM1002, etc.)
-  const nextIdNum = 1000 + admins.length + 1;
-  const newAdminId = `ADM${nextIdNum}`;
-
-  const newAdmin = {
-    id: newAdminId,
-    username: formData.username.trim(),
-    password: formData.password,
-    name: formData.name.trim(),
-    email: formData.email.trim(),
-    phone: formData.phone.trim(),
-    role: "Administrator",
-    designation: "Administrator",
-    clinicName: "MediCare Clinic & Hospital",
-    address: "Clinic Central Office",
-    dateJoined: new Date().toISOString().split('T')[0],
-    avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=250&q=80"
-  };
-
-  admins.push(newAdmin);
-  setCollection(KEYS.ADMINS, admins);
-  return newAdmin;
+  return { success: false, message: 'Invalid Username/Email or Password' };
 };
 
 export const updateAdminProfile = (adminId, updatedFields) => {
-  const admins = getAdmins();
-  const index = admins.findIndex((a) => a.id === adminId);
+  const users = getUsers();
+  const index = users.findIndex((u) => u.id === adminId);
   
   if (index === -1) {
-    throw new Error('Admin account not found.');
+    throw new Error('User account not found.');
   }
 
-  // Check email uniqueness if email changed
-  if (updatedFields.email) {
-    const cleanEmail = updatedFields.email.trim().toLowerCase();
-    const duplicateEmail = admins.some(
-      (a) => a.id !== adminId && a.email && a.email.toLowerCase() === cleanEmail
-    );
-    if (duplicateEmail) {
-      throw new Error('This email is already registered by another account.');
-    }
-  }
-
-  // Check phone uniqueness if phone changed
-  if (updatedFields.phone) {
-    const cleanPhone = updatedFields.phone.trim();
-    const duplicatePhone = admins.some(
-      (a) => a.id !== adminId && a.phone && a.phone.trim() === cleanPhone
-    );
-    if (duplicatePhone) {
-      throw new Error('This phone number is already registered by another account.');
-    }
-  }
-
-  // Admin ID is locked and cannot be changed
-  const updatedAdmin = {
-    ...admins[index],
-    name: updatedFields.name ? updatedFields.name.trim() : admins[index].name,
-    email: updatedFields.email ? updatedFields.email.trim() : admins[index].email,
-    phone: updatedFields.phone ? updatedFields.phone.trim() : admins[index].phone,
-    clinicName: updatedFields.clinicName ? updatedFields.clinicName.trim() : admins[index].clinicName,
-    address: updatedFields.address ? updatedFields.address.trim() : admins[index].address,
-    avatar: updatedFields.avatar ? updatedFields.avatar.trim() : admins[index].avatar
+  const updatedUser = {
+    ...users[index],
+    fullName: updatedFields.name ? updatedFields.name.trim() : (users[index].fullName || users[index].name),
+    name: updatedFields.name ? updatedFields.name.trim() : users[index].name,
+    email: updatedFields.email ? updatedFields.email.trim() : users[index].email,
+    phone: updatedFields.phone ? updatedFields.phone.trim() : users[index].phone,
+    clinicName: updatedFields.clinicName ? updatedFields.clinicName.trim() : users[index].clinicName,
+    address: updatedFields.address ? updatedFields.address.trim() : users[index].address,
+    avatar: updatedFields.avatar ? updatedFields.avatar.trim() : users[index].avatar
   };
 
-  admins[index] = updatedAdmin;
-  setCollection(KEYS.ADMINS, admins);
+  users[index] = updatedUser;
+  setCollection(KEYS.USERS, users);
+  setCollection(KEYS.ADMINS, users);
 
-  // Sync active session if it's the current logged in admin
   const activeSession = getActiveAdminSession();
   if (activeSession && activeSession.id === adminId) {
     const updatedSession = {
       ...activeSession,
-      name: updatedAdmin.name,
-      email: updatedAdmin.email,
-      phone: updatedAdmin.phone,
-      clinicName: updatedAdmin.clinicName,
-      address: updatedAdmin.address,
-      avatar: updatedAdmin.avatar
+      fullName: updatedUser.fullName,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      phone: updatedUser.phone,
+      clinicName: updatedUser.clinicName,
+      address: updatedUser.address,
+      avatar: updatedUser.avatar
     };
+    localStorage.setItem(KEYS.CURRENT_USER, JSON.stringify(updatedSession));
     localStorage.setItem(KEYS.SESSION, JSON.stringify(updatedSession));
   }
 
-  return updatedAdmin;
+  return updatedUser;
 };
 
 export const getAdminProfile = (adminId) => {
-  const admins = getAdmins();
-  const found = admins.find((a) => a.id === adminId);
+  const users = getUsers();
+  const found = users.find((u) => u.id === adminId);
   if (found) return found;
   return getActiveAdminSession();
 };
 
 export const getActiveAdminSession = () => {
   try {
+    const currentUser = localStorage.getItem(KEYS.CURRENT_USER);
+    if (currentUser) return JSON.parse(currentUser);
+
     const session = localStorage.getItem(KEYS.SESSION);
-    return session ? JSON.parse(session) : null;
+    if (session) return JSON.parse(session);
+
+    return null;
   } catch {
     return null;
   }
 };
 
 export const clearAdminSession = () => {
+  localStorage.removeItem(KEYS.CURRENT_USER);
   localStorage.removeItem(KEYS.SESSION);
 };
 
@@ -262,8 +247,6 @@ export const getPatients = () => getCollection(KEYS.PATIENTS);
 
 export const addPatient = (patientData) => {
   const patients = getPatients();
-
-  // Validate duplicate phone for patient if needed
   const cleanPhone = patientData.phone.trim();
   const existingPatientPhone = patients.some((p) => p.phone === cleanPhone);
   if (existingPatientPhone) {
@@ -400,31 +383,26 @@ export const deleteAppointment = (id) => {
   return true;
 };
 
-// Calculate available time slots for a specific doctor on a target date
 export const getAvailableSlotsForDoctorAndDate = (doctorId, targetDateStr) => {
   const doctors = getDoctors();
   const doctor = doctors.find((d) => d.id === doctorId);
   if (!doctor || doctor.status !== 'Available') return [];
 
-  // Check if doctor works on this day of week
   const dateObj = new Date(targetDateStr + 'T00:00:00');
   const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
   
-  if (!doctor.availableDays.includes(dayName)) {
+  if (!doctor.availableDays || !doctor.availableDays.includes(dayName)) {
     return [];
   }
 
-  // Get existing active appointments for doctor on date
   const appointments = getAppointments();
   const bookedSlots = appointments
     .filter((a) => a.doctorId === doctorId && a.date === targetDateStr && a.status !== 'Cancelled')
     .map((a) => a.timeSlot);
 
-  // Return slots that are NOT booked
   return (doctor.availableSlots || []).filter((slot) => !bookedSlots.includes(slot));
 };
 
-// Statistics calculation for Dashboard
 export const getDashboardStats = () => {
   const doctors = getDoctors();
   const patients = getPatients();

@@ -18,37 +18,44 @@ export const Sidebar = ({ isOpen, onCloseMobile }) => {
     {
       path: '/dashboard',
       label: 'Dashboard',
-      icon: <FaChartLine />
+      icon: <FaChartLine />,
+      id: 'nav-dashboard'
     },
     {
       path: '/doctors',
       label: 'Doctors',
-      icon: <FaUserMd />
+      icon: <FaUserMd />,
+      id: 'nav-doctors'
     },
     {
       path: '/patients',
       label: 'Patients',
-      icon: <FaUserInjured />
+      icon: <FaUserInjured />,
+      id: 'nav-patients'
     },
     {
       path: '/appointments',
       label: 'Appointments',
-      icon: <FaCalendarCheck />
+      icon: <FaCalendarCheck />,
+      id: 'nav-appointments'
     },
     {
       path: '/notifications',
       label: 'Notifications',
-      icon: <FaBell />
+      icon: <FaBell />,
+      id: 'nav-notifications'
     },
     {
       path: '/defects',
       label: 'Defect Log',
-      icon: <FaBug />
+      icon: <FaBug />,
+      id: 'nav-defects'
     },
     {
       path: '/profile',
       label: 'Admin Profile',
-      icon: <FaUserCog />
+      icon: <FaUserCog />,
+      id: 'nav-profile'
     }
   ];
 
@@ -56,25 +63,34 @@ export const Sidebar = ({ isOpen, onCloseMobile }) => {
     <>
       {/* Backdrop overlay for mobile drawer */}
       {isOpen && (
-        <div className="sidebar-backdrop" onClick={onCloseMobile} />
+        <div className="sidebar-backdrop" id="sidebar-backdrop" data-testid="sidebar-backdrop" onClick={onCloseMobile} />
       )}
 
-      <aside className={`sidebar ${isOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
+      <aside className={`sidebar ${isOpen ? 'sidebar-open' : 'sidebar-closed'}`} id="main-sidebar" data-testid="main-sidebar">
         <div className="sidebar-mobile-header">
           <div className="sidebar-mobile-title">
             <FaShieldAlt className="mobile-shield-icon" /> Navigation
           </div>
-          <button className="sidebar-close-btn" onClick={onCloseMobile}>
+          <button
+            className="sidebar-close-btn"
+            id="sidebar-close-btn"
+            data-testid="sidebar-close-btn"
+            aria-label="Close Mobile Sidebar"
+            onClick={onCloseMobile}
+          >
             <FaTimes />
           </button>
         </div>
 
-        <nav className="sidebar-nav">
+        <nav className="sidebar-nav" id="sidebar-nav" data-testid="sidebar-nav">
           <div className="sidebar-section-label">MAIN MENU</div>
           {navItems.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
+              id={item.id}
+              data-testid={item.id}
+              aria-label={`Navigate to ${item.label}`}
               className={({ isActive }) =>
                 `sidebar-link ${isActive ? 'active' : ''}`
               }
@@ -87,7 +103,7 @@ export const Sidebar = ({ isOpen, onCloseMobile }) => {
         </nav>
 
         <div className="sidebar-footer">
-          <div className="system-status-card">
+          <div className="system-status-card" id="system-status-card" data-testid="system-status-card">
             <div className="status-indicator">
               <span className="pulse-dot"></span> System Active
             </div>

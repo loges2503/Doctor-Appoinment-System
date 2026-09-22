@@ -93,7 +93,6 @@ export const Appointments = () => {
     currentPage * ITEMS_PER_PAGE
   );
 
-  // Reset page to 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm, doctorFilter, specFilter, statusFilter, dateFilter, sortOrder]);
@@ -171,31 +170,53 @@ export const Appointments = () => {
   };
 
   return (
-    <div className="appointments-page">
-      <div className="page-header">
+    <div className="appointments-page" id="appointments-page" data-testid="appointments-page">
+      <div className="page-header" id="appointments-header" data-testid="appointments-header">
         <div>
-          <h1 className="page-title">Appointment Management</h1>
-          <p className="page-subtitle">Schedule, filter, monitor status, and export appointment lists.</p>
+          <h1 className="page-title" id="appointments-title" data-testid="appointments-title">Appointment Management</h1>
+          <p className="page-subtitle" id="appointments-subtitle" data-testid="appointments-subtitle">Schedule, filter, monitor status, and export appointment lists.</p>
         </div>
         <div className="header-export-actions">
-          <button className="btn btn-outline" onClick={handleExportCSV}>
+          <button
+            className="btn btn-outline"
+            id="export-csv-btn"
+            data-testid="export-csv-btn"
+            aria-label="Export CSV"
+            onClick={handleExportCSV}
+          >
             <FaFileCsv style={{ color: '#10B981' }} /> Export CSV
           </button>
-          <button className="btn btn-outline" onClick={handleExportPDF}>
+          <button
+            className="btn btn-outline"
+            id="export-pdf-btn"
+            data-testid="export-pdf-btn"
+            aria-label="Export PDF"
+            onClick={handleExportPDF}
+          >
             <FaFilePdf style={{ color: '#EF4444' }} /> Export PDF
           </button>
-          <button className="btn btn-primary" onClick={() => setIsBookingOpen(true)}>
+          <button
+            className="btn btn-primary"
+            id="book-appointment-btn"
+            data-testid="book-appointment-btn"
+            aria-label="Book Appointment"
+            onClick={() => setIsBookingOpen(true)}
+          >
             <FaPlus /> Book Appointment
           </button>
         </div>
       </div>
 
       {/* Filter & Search Toolbar */}
-      <div className="card filter-card">
+      <div className="card filter-card" id="appointments-filter-card" data-testid="appointments-filter-card">
         <div className="search-input-box">
           <FaSearch className="search-icon" />
           <input
             type="text"
+            id="search-appointment-input"
+            name="searchAppointment"
+            data-testid="search-appointment-input"
+            aria-label="Search Appointments"
             className="form-input search-field"
             placeholder="Search by ID, patient, doctor, or reason..."
             value={searchTerm}
@@ -205,8 +226,12 @@ export const Appointments = () => {
 
         <div className="filters-row">
           <div className="filter-item">
-            <label className="filter-label">Doctor:</label>
+            <label className="filter-label" htmlFor="doctor-filter-select">Doctor:</label>
             <select
+              id="doctor-filter-select"
+              name="doctorFilter"
+              data-testid="doctor-filter-select"
+              aria-label="Filter by Doctor"
               className="form-select filter-select"
               value={doctorFilter}
               onChange={(e) => setDoctorFilter(e.target.value)}
@@ -221,8 +246,12 @@ export const Appointments = () => {
           </div>
 
           <div className="filter-item">
-            <label className="filter-label">Specialization:</label>
+            <label className="filter-label" htmlFor="spec-filter-select">Specialization:</label>
             <select
+              id="spec-filter-select"
+              name="specFilter"
+              data-testid="spec-filter-select"
+              aria-label="Filter by Specialization"
               className="form-select filter-select"
               value={specFilter}
               onChange={(e) => setSpecFilter(e.target.value)}
@@ -237,8 +266,12 @@ export const Appointments = () => {
           </div>
 
           <div className="filter-item">
-            <label className="filter-label">Status:</label>
+            <label className="filter-label" htmlFor="status-filter-select">Status:</label>
             <select
+              id="status-filter-select"
+              name="statusFilter"
+              data-testid="status-filter-select"
+              aria-label="Filter by Status"
               className="form-select filter-select"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
@@ -251,9 +284,13 @@ export const Appointments = () => {
           </div>
 
           <div className="filter-item">
-            <label className="filter-label">Date:</label>
+            <label className="filter-label" htmlFor="date-filter-input">Date:</label>
             <input
               type="date"
+              id="date-filter-input"
+              name="dateFilter"
+              data-testid="date-filter-input"
+              aria-label="Filter by Date"
               className="form-input filter-select"
               value={dateFilter}
               onChange={(e) => setDateFilter(e.target.value)}
@@ -261,6 +298,8 @@ export const Appointments = () => {
             {dateFilter && (
               <button
                 className="btn btn-outline btn-sm"
+                id="clear-date-filter-btn"
+                data-testid="clear-date-filter-btn"
                 onClick={() => setDateFilter('')}
                 title="Clear date filter"
               >
@@ -272,6 +311,9 @@ export const Appointments = () => {
           <div className="filter-item">
             <button
               className="btn btn-outline btn-sm"
+              id="sort-date-btn"
+              data-testid="sort-date-btn"
+              aria-label="Toggle Sort Order"
               onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
               title="Toggle Sort Date Order"
             >
@@ -283,9 +325,9 @@ export const Appointments = () => {
       </div>
 
       {/* Appointment Table */}
-      <div className="card table-card" style={{ padding: 0, overflow: 'hidden' }}>
+      <div className="card table-card" id="appointments-table-card" data-testid="appointments-table-card" style={{ padding: 0, overflow: 'hidden' }}>
         {filteredAppointments.length === 0 ? (
-          <div className="empty-state-card" style={{ padding: '3rem' }}>
+          <div className="empty-state-card" id="appointments-empty-state" data-testid="appointments-empty-state" style={{ padding: '3rem' }}>
             <div className="empty-icon-wrapper">
               <FaCalendarCheck />
             </div>
@@ -294,38 +336,38 @@ export const Appointments = () => {
           </div>
         ) : (
           <>
-            <div className="table-container" style={{ border: 'none' }}>
-              <table className="table">
+            <div className="table-container">
+              <table className="table" id="appointment-table" data-testid="appointment-table">
                 <thead>
                   <tr>
-                    <th>APT ID</th>
-                    <th>Patient Name</th>
-                    <th>Doctor Name</th>
-                    <th>Specialization</th>
-                    <th>Date & Time</th>
-                    <th>Reason</th>
-                    <th>Status</th>
-                    <th style={{ textAlign: 'right' }}>Actions</th>
+                    <th id="th-apt-id" data-testid="th-apt-id">APT ID</th>
+                    <th id="th-apt-patient" data-testid="th-apt-patient">Patient Name</th>
+                    <th id="th-apt-doctor" data-testid="th-apt-doctor">Doctor Name</th>
+                    <th id="th-apt-spec" data-testid="th-apt-spec">Specialization</th>
+                    <th id="th-apt-datetime" data-testid="th-apt-datetime">Date & Time</th>
+                    <th id="th-apt-reason" data-testid="th-apt-reason">Reason</th>
+                    <th id="th-apt-status" data-testid="th-apt-status">Status</th>
+                    <th style={{ textAlign: 'right' }} id="th-apt-actions" data-testid="th-apt-actions">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {paginatedAppointments.map((apt) => (
-                    <tr key={apt.id}>
-                      <td>
+                    <tr key={apt.id} id={`row-apt-${apt.id}`} data-testid={`row-apt-${apt.id}`}>
+                      <td id={`col-apt-id-${apt.id}`}>
                         <strong style={{ color: '#3B82F6' }}>{apt.id}</strong>
                       </td>
-                      <td>
+                      <td id={`col-apt-patient-${apt.id}`}>
                         <strong>{apt.patientName}</strong>
                       </td>
-                      <td>{apt.doctorName}</td>
-                      <td>
+                      <td id={`col-apt-doctor-${apt.id}`}>{apt.doctorName}</td>
+                      <td id={`col-apt-spec-${apt.id}`}>
                         <span className="spec-badge-text">{apt.specialization}</span>
                       </td>
-                      <td>
+                      <td id={`col-apt-datetime-${apt.id}`}>
                         <div>{formatDateDisplay(apt.date)}</div>
                         <small style={{ color: '#6B7280' }}>{apt.timeSlot}</small>
                       </td>
-                      <td>
+                      <td id={`col-apt-reason-${apt.id}`}>
                         <span
                           style={{ fontSize: '0.8125rem', color: '#4B5563' }}
                           title={apt.reason}
@@ -337,8 +379,8 @@ export const Appointments = () => {
                             : 'N/A'}
                         </span>
                       </td>
-                      <td>
-                        <Badge status={apt.status} />
+                      <td id={`col-apt-status-${apt.id}`}>
+                        <Badge status={apt.status} id={`badge-apt-${apt.id}`} />
                       </td>
                       <td style={{ textAlign: 'right' }}>
                         <div className="apt-actions-group">
@@ -346,6 +388,9 @@ export const Appointments = () => {
                             <>
                               <button
                                 className="btn btn-outline btn-sm text-success"
+                                id={`complete-apt-btn-${apt.id}`}
+                                data-testid={`complete-apt-btn-${apt.id}`}
+                                aria-label={`Complete ${apt.id}`}
                                 onClick={() => handleStatusChange(apt.id, 'Completed')}
                                 title="Mark as Completed"
                               >
@@ -353,6 +398,9 @@ export const Appointments = () => {
                               </button>
                               <button
                                 className="btn btn-outline btn-sm"
+                                id={`cancel-apt-btn-${apt.id}`}
+                                data-testid={`cancel-apt-btn-${apt.id}`}
+                                aria-label={`Cancel ${apt.id}`}
                                 style={{ color: '#F59E0B' }}
                                 onClick={() => handleOpenCancelConfirm(apt)}
                                 title="Cancel Appointment"
@@ -363,6 +411,9 @@ export const Appointments = () => {
                           )}
                           <button
                             className="btn btn-outline btn-sm"
+                            id={`delete-apt-btn-${apt.id}`}
+                            data-testid={`delete-apt-btn-${apt.id}`}
+                            aria-label={`Delete ${apt.id}`}
                             style={{ color: '#EF4444' }}
                             onClick={() => handleOpenDeleteConfirm(apt)}
                             title="Delete Appointment"

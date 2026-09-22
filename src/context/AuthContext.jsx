@@ -3,7 +3,6 @@ import { notify } from './NotificationContext';
 import {
   initializeLocalStorage,
   authenticateAdmin,
-  registerAdmin,
   updateAdminProfile,
   getActiveAdminSession,
   clearAdminSession
@@ -16,10 +15,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Seed sample data if local storage is empty
     initializeLocalStorage();
-
-    // Check active session
     const session = getActiveAdminSession();
     if (session) {
       setAdmin(session);
@@ -31,40 +27,29 @@ export const AuthProvider = ({ children }) => {
     const res = authenticateAdmin(username, password);
     if (res.success) {
       setAdmin(res.user);
-      // Trigger centered notification for successful login
-      notify.success('Welcome back! You have logged in successfully.', 'Login Successful');
-      return true;
+      notify.success(`Welcome back, ${res.user.fullName || res.user.name}! Logged in as ${res.user.role}.`, 'Login Success');
+      return { success: true, user: res.user };
     } else {
-      notify.error(res.message || 'Invalid username or password.', 'Login Failed');
-      return false;
-    }
-  };
-
-  const register = (formData) => {
-    try {
-      const newAdmin = registerAdmin(formData);
-      notify.success('Registration successful! You can now log in.', 'Account Created');
-      return { success: true, admin: newAdmin };
-    } catch (err) {
-      notify.error(err.message || 'Registration failed.', 'Registration Error');
-      return { success: false, message: err.message };
+      notify.error(res.message || 'Invalid Username or Password.', 'Invalid Login');
+      return { success: false, message: res.message };
     }
   };
 
   const updateProfile = (updatedFields) => {
     if (!admin) return false;
     try {
-      const updatedAdmin = updateAdminProfile(admin.id, updatedFields);
+      const updatedUser = updateAdminProfile(admin.id, updatedFields);
       setAdmin((prev) => ({
         ...prev,
-        name: updatedAdmin.name,
-        email: updatedAdmin.email,
-        phone: updatedAdmin.phone,
-        clinicName: updatedAdmin.clinicName,
-        address: updatedAdmin.address,
-        avatar: updatedAdmin.avatar
+        fullName: updatedUser.fullName,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        phone: updatedUser.phone,
+        clinicName: updatedUser.clinicName,
+        address: updatedUser.address,
+        avatar: updatedUser.avatar
       }));
-      notify.success('Admin profile updated successfully!', 'Profile Updated');
+      notify.success('Profile updated successfully!', 'Profile Updated');
       return true;
     } catch (err) {
       notify.error(err.message || 'Failed to update profile.', 'Update Error');
@@ -82,8 +67,8 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         admin,
+        user: admin,
         login,
-        register,
         updateProfile,
         logout,
         isAuthenticated: !!admin,

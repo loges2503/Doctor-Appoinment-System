@@ -9,13 +9,15 @@ export const Pagination = ({ currentPage, totalPages, onPageChange, totalItems, 
   const endItem = Math.min(currentPage * itemsPerPage, totalItems);
 
   return (
-    <div className="pagination-container">
-      <div className="pagination-info">
+    <div className="pagination-container" id="pagination-container" data-testid="pagination-container">
+      <div className="pagination-info" id="pagination-info" data-testid="pagination-info">
         Showing <strong>{startItem}</strong> - <strong>{endItem}</strong> of <strong>{totalItems}</strong> entries
       </div>
-      <div className="pagination-controls">
+      <div className="pagination-controls" id="pagination-controls" data-testid="pagination-controls">
         <button
           className="page-btn"
+          id="pagination-prev"
+          data-testid="pagination-prev"
           disabled={currentPage === 1}
           onClick={() => onPageChange(currentPage - 1)}
           aria-label="Previous Page"
@@ -26,8 +28,11 @@ export const Pagination = ({ currentPage, totalPages, onPageChange, totalItems, 
         {Array.from({ length: totalPages }, (_, idx) => idx + 1).map((page) => (
           <button
             key={page}
+            id={`pagination-page-${page}`}
+            data-testid={`pagination-page-${page}`}
             className={`page-num ${page === currentPage ? 'active' : ''}`}
             onClick={() => onPageChange(page)}
+            aria-label={`Go to page ${page}`}
           >
             {page}
           </button>
@@ -35,6 +40,8 @@ export const Pagination = ({ currentPage, totalPages, onPageChange, totalItems, 
 
         <button
           className="page-btn"
+          id="pagination-next"
+          data-testid="pagination-next"
           disabled={currentPage === totalPages}
           onClick={() => onPageChange(currentPage + 1)}
           aria-label="Next Page"

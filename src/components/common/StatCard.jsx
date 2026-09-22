@@ -2,10 +2,15 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import './StatCard.css';
 
-export const StatCard = ({ title, value, icon, badgeText, badgeColor = 'blue', accentColor = '#3B82F6' }) => {
+export const StatCard = ({ id, title, value, icon, badgeText, badgeColor = 'blue', accentColor = '#3B82F6' }) => {
+  const testId = id || title.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-card';
+
   return (
     <motion.div
       className="stat-card"
+      id={testId}
+      data-testid={testId}
+      aria-label={`${title}: ${value}`}
       whileHover={{ y: -3, boxShadow: '0 12px 20px -4px rgba(0, 0, 0, 0.08)' }}
       transition={{ duration: 0.2 }}
     >

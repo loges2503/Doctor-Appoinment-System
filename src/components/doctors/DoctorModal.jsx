@@ -112,19 +112,23 @@ export const DoctorModal = ({ isOpen, onClose, onSave, doctor = null }) => {
       title={isEdit ? 'Edit Doctor Profile' : 'Add New Doctor'}
       maxWidth="640px"
     >
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} id="doctor-form" data-testid="doctor-form" noValidate>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
           <div className="form-group" style={{ gridColumn: 'span 2' }}>
-            <label className="form-label">Doctor Name *</label>
+            <label className="form-label" htmlFor="doctor-name-input">Doctor Name *</label>
             <input
               type="text"
+              id="doctor-name-input"
               name="name"
+              data-testid="doctor-name-input"
+              aria-label="Doctor Name"
               placeholder="e.g. Dr. Sarah Jenkins"
               className={`form-input ${errors.name ? 'error' : ''}`}
               value={formData.name}
               onChange={handleChange}
+              required
             />
-            {errors.name && <span className="error-text">{errors.name}</span>}
+            {errors.name && <span className="error-text" id="doctor-name-error" data-testid="doctor-name-error">{errors.name}</span>}
           </div>
 
           <div className="form-group" style={{ gridColumn: 'span 2' }}>
@@ -135,6 +139,8 @@ export const DoctorModal = ({ isOpen, onClose, onSave, doctor = null }) => {
                   key={idx}
                   src={url}
                   alt={`Avatar ${idx + 1}`}
+                  id={`preset-avatar-${idx}`}
+                  data-testid={`preset-avatar-${idx}`}
                   onClick={() => setFormData((prev) => ({ ...prev, image: url }))}
                   style={{
                     width: '46px',
@@ -151,7 +157,10 @@ export const DoctorModal = ({ isOpen, onClose, onSave, doctor = null }) => {
             </div>
             <input
               type="url"
+              id="doctor-image-input"
               name="image"
+              data-testid="doctor-image-input"
+              aria-label="Doctor Avatar URL"
               placeholder="Or enter custom image URL"
               className="form-input"
               style={{ marginTop: '8px' }}
@@ -161,12 +170,16 @@ export const DoctorModal = ({ isOpen, onClose, onSave, doctor = null }) => {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Specialization *</label>
+            <label className="form-label" htmlFor="doctor-spec-dropdown">Specialization *</label>
             <select
+              id="doctor-spec-dropdown"
               name="specialization"
+              data-testid="doctor-spec-dropdown"
+              aria-label="Doctor Specialization"
               className={`form-select ${errors.specialization ? 'error' : ''}`}
               value={formData.specialization}
               onChange={handleChange}
+              required
             >
               {SPECIALIZATIONS_LIST.map((spec) => (
                 <option key={spec} value={spec}>
@@ -174,13 +187,16 @@ export const DoctorModal = ({ isOpen, onClose, onSave, doctor = null }) => {
                 </option>
               ))}
             </select>
-            {errors.specialization && <span className="error-text">{errors.specialization}</span>}
+            {errors.specialization && <span className="error-text" id="doctor-spec-error" data-testid="doctor-spec-error">{errors.specialization}</span>}
           </div>
 
           <div className="form-group">
-            <label className="form-label">Status</label>
+            <label className="form-label" htmlFor="doctor-status-dropdown">Status</label>
             <select
+              id="doctor-status-dropdown"
               name="status"
+              data-testid="doctor-status-dropdown"
+              aria-label="Doctor Status"
               className="form-select"
               value={formData.status}
               onChange={handleChange}
@@ -191,44 +207,56 @@ export const DoctorModal = ({ isOpen, onClose, onSave, doctor = null }) => {
           </div>
 
           <div className="form-group" style={{ gridColumn: 'span 2' }}>
-            <label className="form-label">Qualification *</label>
+            <label className="form-label" htmlFor="doctor-qual-input">Qualification *</label>
             <input
               type="text"
+              id="doctor-qual-input"
               name="qualification"
+              data-testid="doctor-qual-input"
+              aria-label="Doctor Qualification"
               placeholder="e.g. MBBS, MD (Cardiology)"
               className={`form-input ${errors.qualification ? 'error' : ''}`}
               value={formData.qualification}
               onChange={handleChange}
+              required
             />
-            {errors.qualification && <span className="error-text">{errors.qualification}</span>}
+            {errors.qualification && <span className="error-text" id="doctor-qual-error" data-testid="doctor-qual-error">{errors.qualification}</span>}
           </div>
 
           <div className="form-group">
-            <label className="form-label">Experience (Years) *</label>
+            <label className="form-label" htmlFor="doctor-exp-input">Experience (Years) *</label>
             <input
               type="number"
+              id="doctor-exp-input"
               name="experience"
+              data-testid="doctor-exp-input"
+              aria-label="Doctor Experience"
               min="0"
               placeholder="e.g. 10"
               className={`form-input ${errors.experience ? 'error' : ''}`}
               value={formData.experience}
               onChange={handleChange}
+              required
             />
-            {errors.experience && <span className="error-text">{errors.experience}</span>}
+            {errors.experience && <span className="error-text" id="doctor-exp-error" data-testid="doctor-exp-error">{errors.experience}</span>}
           </div>
 
           <div className="form-group">
-            <label className="form-label">Consultation Fee ($) *</label>
+            <label className="form-label" htmlFor="doctor-fee-input">Consultation Fee ($) *</label>
             <input
               type="number"
+              id="doctor-fee-input"
               name="fee"
+              data-testid="doctor-fee-input"
+              aria-label="Doctor Consultation Fee"
               min="1"
               placeholder="e.g. 150"
               className={`form-input ${errors.fee ? 'error' : ''}`}
               value={formData.fee}
               onChange={handleChange}
+              required
             />
-            {errors.fee && <span className="error-text">{errors.fee}</span>}
+            {errors.fee && <span className="error-text" id="doctor-fee-error" data-testid="doctor-fee-error">{errors.fee}</span>}
           </div>
 
           <div className="form-group" style={{ gridColumn: 'span 2' }}>
@@ -236,10 +264,14 @@ export const DoctorModal = ({ isOpen, onClose, onSave, doctor = null }) => {
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '4px' }}>
               {DAYS_OF_WEEK.map((day) => {
                 const isSelected = formData.availableDays.includes(day);
+                const dayId = `day-${day.toLowerCase()}`;
                 return (
                   <button
                     type="button"
                     key={day}
+                    id={dayId}
+                    data-testid={dayId}
+                    aria-label={`Toggle ${day}`}
                     onClick={() => handleDayToggle(day)}
                     style={{
                       padding: '0.35rem 0.7rem',
@@ -259,18 +291,22 @@ export const DoctorModal = ({ isOpen, onClose, onSave, doctor = null }) => {
                 );
               })}
             </div>
-            {errors.availableDays && <span className="error-text">{errors.availableDays}</span>}
+            {errors.availableDays && <span className="error-text" id="doctor-days-error" data-testid="doctor-days-error">{errors.availableDays}</span>}
           </div>
 
           <div className="form-group" style={{ gridColumn: 'span 2' }}>
             <label className="form-label">Available Time Slots *</label>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '6px', marginTop: '4px' }}>
-              {DEFAULT_TIME_SLOTS.map((slot) => {
+              {DEFAULT_TIME_SLOTS.map((slot, idx) => {
                 const isSelected = formData.availableSlots.includes(slot);
+                const slotId = `slot-${idx}`;
                 return (
                   <button
                     type="button"
                     key={slot}
+                    id={slotId}
+                    data-testid={slotId}
+                    aria-label={`Toggle slot ${slot}`}
                     onClick={() => handleSlotToggle(slot)}
                     style={{
                       padding: '0.35rem 0.5rem',
@@ -291,15 +327,28 @@ export const DoctorModal = ({ isOpen, onClose, onSave, doctor = null }) => {
                 );
               })}
             </div>
-            {errors.availableSlots && <span className="error-text">{errors.availableSlots}</span>}
+            {errors.availableSlots && <span className="error-text" id="doctor-slots-error" data-testid="doctor-slots-error">{errors.availableSlots}</span>}
           </div>
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.5rem', borderTop: '1px solid #E2E8F0', paddingTop: '1rem' }}>
-          <button type="button" className="btn btn-outline" onClick={onClose}>
+          <button
+            type="button"
+            className="btn btn-outline"
+            id="cancel-doctor-btn"
+            data-testid="cancel-doctor-btn"
+            aria-label="Cancel"
+            onClick={onClose}
+          >
             Cancel
           </button>
-          <button type="submit" className="btn btn-primary">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            id="save-doctor-btn"
+            data-testid="save-doctor-btn"
+            aria-label="Save Doctor Profile"
+          >
             {isEdit ? 'Save Changes' : 'Add Doctor'}
           </button>
         </div>

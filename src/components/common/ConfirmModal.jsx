@@ -31,15 +31,22 @@ export const ConfirmModal = ({
         >
           <FaExclamationTriangle />
         </div>
-        <p style={{ color: '#4B5563', fontSize: '0.95rem', marginBottom: '1.5rem' }}>
+        <p style={{ color: '#4B5563', fontSize: '0.95rem', marginBottom: '1.5rem' }} id="confirm-modal-message" data-testid="confirm-modal-message">
           {message}
         </p>
         <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
-          <button className="btn btn-outline" onClick={onClose}>
+          <button
+            className="btn btn-outline"
+            id="confirm-modal-cancel-btn"
+            data-testid="confirm-modal-cancel-btn"
+            onClick={onClose}
+          >
             {cancelText}
           </button>
           <button
             className={`btn ${isDanger ? 'btn-danger' : 'btn-primary'}`}
+            id="confirm-modal-submit-btn"
+            data-testid="confirm-modal-submit-btn"
             onClick={() => {
               onConfirm();
               onClose();

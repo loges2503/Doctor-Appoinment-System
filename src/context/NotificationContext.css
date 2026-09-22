@@ -2,7 +2,7 @@
   position: fixed;
   inset: 0;
   z-index: 999999;
-  background-color: rgba(15, 23, 42, 0.55);
+  background-color: rgba(15, 23, 42, 0.6);
   backdrop-filter: blur(5px);
   display: flex;
   align-items: center;
@@ -12,7 +12,7 @@
 
 .centered-notification-card {
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
   background-color: #FFFFFF;
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-color);
@@ -22,7 +22,28 @@
   position: relative;
   overflow: hidden;
   margin: auto;
+}
+
+.notify-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  color: var(--text-light);
   cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.notify-close-btn:hover {
+  color: var(--text-main);
+  background-color: #F1F5F9;
 }
 
 .notify-icon-wrapper {
@@ -87,7 +108,8 @@
   font-size: 0.925rem;
   font-weight: 500;
   color: var(--text-muted);
-  line-height: 1.45;
+  line-height: 1.5;
+  white-space: pre-line;
   margin-bottom: 1.5rem;
 }
 

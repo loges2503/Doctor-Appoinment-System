@@ -92,23 +92,33 @@ export const Patients = () => {
   });
 
   return (
-    <div className="patients-page">
-      <div className="page-header">
+    <div className="patients-page" id="patients-page" data-testid="patients-page">
+      <div className="page-header" id="patients-header" data-testid="patients-header">
         <div>
-          <h1 className="page-title">Patient Directory</h1>
-          <p className="page-subtitle">Manage registered patient profiles, contact details, and records.</p>
+          <h1 className="page-title" id="patients-title" data-testid="patients-title">Patient Directory</h1>
+          <p className="page-subtitle" id="patients-subtitle" data-testid="patients-subtitle">Manage registered patient profiles, contact details, and records.</p>
         </div>
-        <button className="btn btn-primary" onClick={handleOpenAddModal}>
+        <button
+          className="btn btn-primary"
+          id="add-patient-btn"
+          data-testid="add-patient-btn"
+          aria-label="Register New Patient"
+          onClick={handleOpenAddModal}
+        >
           <FaPlus /> Register New Patient
         </button>
       </div>
 
       {/* Search & Filter Bar */}
-      <div className="card filter-card">
+      <div className="card filter-card" id="patients-filter-card" data-testid="patients-filter-card">
         <div className="search-input-box">
           <FaSearch className="search-icon" />
           <input
             type="text"
+            id="search-patient-input"
+            name="searchPatient"
+            data-testid="search-patient-input"
+            aria-label="Search Patients"
             className="form-input search-field"
             placeholder="Search patients by name, phone number, or email..."
             value={searchTerm}
@@ -117,8 +127,12 @@ export const Patients = () => {
         </div>
 
         <div className="filter-item">
-          <label className="filter-label">Gender:</label>
+          <label className="filter-label" htmlFor="gender-filter-select">Gender:</label>
           <select
+            id="gender-filter-select"
+            name="genderFilter"
+            data-testid="gender-filter-select"
+            aria-label="Filter by Gender"
             className="form-select filter-select"
             value={genderFilter}
             onChange={(e) => setGenderFilter(e.target.value)}
@@ -132,9 +146,9 @@ export const Patients = () => {
       </div>
 
       {/* Patient List Table */}
-      <div className="card table-card">
+      <div className="card table-card" id="patients-table-card" data-testid="patients-table-card">
         {filteredPatients.length === 0 ? (
-          <div className="empty-state-card" style={{ border: 'none' }}>
+          <div className="empty-state-card" id="patients-empty-state" data-testid="patients-empty-state" style={{ border: 'none' }}>
             <div className="empty-icon-wrapper">
               <FaUserInjured />
             </div>
@@ -143,24 +157,24 @@ export const Patients = () => {
           </div>
         ) : (
           <div className="table-container">
-            <table className="table">
+            <table className="table" id="patient-table" data-testid="patient-table">
               <thead>
                 <tr>
-                  <th>Patient ID</th>
-                  <th>Patient Name</th>
-                  <th>Age / Gender</th>
-                  <th>Contact Info</th>
-                  <th>Address</th>
-                  <th style={{ textAlign: 'right' }}>Actions</th>
+                  <th id="th-patient-id" data-testid="th-patient-id">Patient ID</th>
+                  <th id="th-patient-name" data-testid="th-patient-name">Patient Name</th>
+                  <th id="th-patient-age-gender" data-testid="th-patient-age-gender">Age / Gender</th>
+                  <th id="th-patient-contact" data-testid="th-patient-contact">Contact Info</th>
+                  <th id="th-patient-address" data-testid="th-patient-address">Address</th>
+                  <th style={{ textAlign: 'right' }} id="th-patient-actions" data-testid="th-patient-actions">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredPatients.map((patient) => (
-                  <tr key={patient.id}>
-                    <td>
+                  <tr key={patient.id} id={`row-patient-${patient.id}`} data-testid={`row-patient-${patient.id}`}>
+                    <td id={`col-patient-id-${patient.id}`}>
                       <strong style={{ color: '#14B8A6' }}>{patient.id}</strong>
                     </td>
-                    <td>
+                    <td id={`col-patient-name-${patient.id}`}>
                       <div className="patient-name-cell">
                         <div className="patient-avatar-mini">
                           {patient.name.charAt(0).toUpperCase()}
@@ -170,10 +184,10 @@ export const Patients = () => {
                         </div>
                       </div>
                     </td>
-                    <td>
+                    <td id={`col-patient-age-gender-${patient.id}`}>
                       {patient.age} Yrs &bull; {patient.gender}
                     </td>
-                    <td>
+                    <td id={`col-patient-contact-${patient.id}`}>
                       <div className="contact-cell">
                         <div>
                           <FaPhoneAlt className="cell-icon" /> {patient.phone}
@@ -185,7 +199,7 @@ export const Patients = () => {
                         )}
                       </div>
                     </td>
-                    <td>
+                    <td id={`col-patient-address-${patient.id}`}>
                       <div className="address-cell">
                         <FaMapMarkerAlt className="cell-icon" />{' '}
                         {patient.address || <span style={{ color: '#9CA3AF' }}>Not provided</span>}
@@ -195,12 +209,18 @@ export const Patients = () => {
                       <div className="action-buttons-group">
                         <button
                           className="btn btn-outline btn-sm"
+                          id={`edit-patient-btn-${patient.id}`}
+                          data-testid={`edit-patient-btn-${patient.id}`}
+                          aria-label={`Edit ${patient.name}`}
                           onClick={() => handleOpenEditModal(patient)}
                         >
                           <FaEdit /> Edit
                         </button>
                         <button
                           className="btn btn-outline btn-sm"
+                          id={`delete-patient-btn-${patient.id}`}
+                          data-testid={`delete-patient-btn-${patient.id}`}
+                          aria-label={`Delete ${patient.name}`}
                           style={{ color: '#EF4444' }}
                           onClick={() => handleOpenDeleteModal(patient)}
                         >

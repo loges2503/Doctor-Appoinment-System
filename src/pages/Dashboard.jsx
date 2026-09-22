@@ -99,22 +99,33 @@ export const Dashboard = () => {
   };
 
   return (
-    <div className="dashboard-page">
-      <div className="page-header">
+    <div className="dashboard-page" id="dashboard-page" data-testid="dashboard-page">
+      <div className="page-header" id="dashboard-header" data-testid="dashboard-header">
         <div>
-          <h1 className="page-title">Clinic Reception Overview</h1>
-          <p className="page-subtitle">Real-time stats and management overview for receptionist.</p>
+          <h1 className="page-title" id="dashboard-title" data-testid="dashboard-title">
+            Clinic Reception Overview
+          </h1>
+          <p className="page-subtitle" id="dashboard-subtitle" data-testid="dashboard-subtitle">
+            Real-time stats and management overview for receptionist.
+          </p>
         </div>
         <div className="header-actions">
-          <button className="btn btn-primary" onClick={() => setIsBookingOpen(true)}>
+          <button
+            className="btn btn-primary"
+            id="book-appointment-btn"
+            data-testid="book-appointment-btn"
+            aria-label="Book New Appointment"
+            onClick={() => setIsBookingOpen(true)}
+          >
             <FaPlus /> Book New Appointment
           </button>
         </div>
       </div>
 
       {/* Statistic Cards Grid */}
-      <div className="stats-grid">
+      <div className="stats-grid" id="dashboard-stats-grid" data-testid="dashboard-stats-grid">
         <StatCard
+          id="total-doctors-card"
           title="Total Doctors"
           value={stats.totalDoctors}
           icon={<FaUserMd />}
@@ -123,6 +134,7 @@ export const Dashboard = () => {
           accentColor="#3B82F6"
         />
         <StatCard
+          id="available-doctors-card"
           title="Available Doctors"
           value={stats.availableDoctors}
           icon={<FaUserCheck />}
@@ -131,6 +143,7 @@ export const Dashboard = () => {
           accentColor="#22C55E"
         />
         <StatCard
+          id="total-patients-card"
           title="Total Patients"
           value={stats.totalPatients}
           icon={<FaUserInjured />}
@@ -139,6 +152,7 @@ export const Dashboard = () => {
           accentColor="#14B8A6"
         />
         <StatCard
+          id="today-appointments-card"
           title="Today's Appointments"
           value={stats.todayAppointments}
           icon={<FaCalendarDay />}
@@ -147,6 +161,7 @@ export const Dashboard = () => {
           accentColor="#F59E0B"
         />
         <StatCard
+          id="upcoming-appointments-card"
           title="Upcoming Appointments"
           value={stats.upcomingAppointments}
           icon={<FaCalendarAlt />}
@@ -157,8 +172,8 @@ export const Dashboard = () => {
       </div>
 
       {/* Visual Charts Section */}
-      <div className="dashboard-charts-grid">
-        <div className="card chart-card">
+      <div className="dashboard-charts-grid" id="dashboard-charts-grid" data-testid="dashboard-charts-grid">
+        <div className="card chart-card" id="specialization-chart-card" data-testid="specialization-chart-card">
           <h3 className="chart-title">Doctors per Specialization</h3>
           <p className="chart-subtitle">Distribution of medical experts across departments</p>
           <div className="chart-wrapper">
@@ -181,7 +196,7 @@ export const Dashboard = () => {
           </div>
         </div>
 
-        <div className="card chart-card">
+        <div className="card chart-card" id="status-chart-card" data-testid="status-chart-card">
           <h3 className="chart-title">Appointment Status Breakdown</h3>
           <p className="chart-subtitle">Proportion of scheduled, completed, and cancelled visits</p>
           <div className="chart-wrapper">
@@ -216,54 +231,60 @@ export const Dashboard = () => {
       </div>
 
       {/* Recent Appointments Preview */}
-      <div className="card recent-appointments-card">
+      <div className="card recent-appointments-card" id="recent-appointments-card" data-testid="recent-appointments-card">
         <div className="card-header-flex">
           <div>
             <h3 className="card-title">Recent Appointments</h3>
             <p className="card-subtitle">Latest bookings processed by clinic reception</p>
           </div>
-          <button className="btn btn-outline btn-sm" onClick={() => navigate('/appointments')}>
+          <button
+            className="btn btn-outline btn-sm"
+            id="view-all-appointments-btn"
+            data-testid="view-all-appointments-btn"
+            aria-label="View All Appointments"
+            onClick={() => navigate('/appointments')}
+          >
             View All <FaArrowRight />
           </button>
         </div>
 
         <div className="table-container" style={{ border: 'none' }}>
-          <table className="table">
+          <table className="table" id="recent-appointments-table" data-testid="recent-appointments-table">
             <thead>
               <tr>
-                <th>Appointment ID</th>
-                <th>Patient</th>
-                <th>Doctor</th>
-                <th>Date & Time</th>
-                <th>Status</th>
+                <th id="th-recent-apt-id" data-testid="th-recent-apt-id">Appointment ID</th>
+                <th id="th-recent-patient" data-testid="th-recent-patient">Patient</th>
+                <th id="th-recent-doctor" data-testid="th-recent-doctor">Doctor</th>
+                <th id="th-recent-date-time" data-testid="th-recent-date-time">Date & Time</th>
+                <th id="th-recent-status" data-testid="th-recent-status">Status</th>
               </tr>
             </thead>
             <tbody>
               {recentAppointments.length === 0 ? (
-                <tr>
+                <tr id="row-recent-empty">
                   <td colSpan="5" style={{ textAlign: 'center', color: '#6B7280', padding: '2rem' }}>
                     No recent appointments found.
                   </td>
                 </tr>
               ) : (
                 recentAppointments.map((apt) => (
-                  <tr key={apt.id}>
-                    <td>
+                  <tr key={apt.id} id={`row-recent-${apt.id}`} data-testid={`row-recent-${apt.id}`}>
+                    <td id={`col-recent-id-${apt.id}`}>
                       <strong style={{ color: '#3B82F6' }}>{apt.id}</strong>
                     </td>
-                    <td>{apt.patientName}</td>
-                    <td>
+                    <td id={`col-recent-patient-${apt.id}`}>{apt.patientName}</td>
+                    <td id={`col-recent-doctor-${apt.id}`}>
                       {apt.doctorName}
                       <br />
                       <small style={{ color: '#6B7280' }}>{apt.specialization}</small>
                     </td>
-                    <td>
+                    <td id={`col-recent-datetime-${apt.id}`}>
                       {formatDateDisplay(apt.date)}
                       <br />
                       <small style={{ color: '#6B7280' }}>{apt.timeSlot}</small>
                     </td>
-                    <td>
-                      <Badge status={apt.status} />
+                    <td id={`col-recent-status-${apt.id}`}>
+                      <Badge status={apt.status} id={`badge-recent-${apt.id}`} />
                     </td>
                   </tr>
                 ))

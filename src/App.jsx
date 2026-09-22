@@ -4,7 +4,6 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { NotificationProvider } from './context/NotificationContext';
 import { Layout } from './components/layout/Layout';
 import { Login } from './pages/Login';
-import { Register } from './pages/Register';
 import { Dashboard } from './pages/Dashboard';
 import { Doctors } from './pages/Doctors';
 import { Patients } from './pages/Patients';
@@ -30,7 +29,7 @@ const ProtectedRoute = ({ children }) => {
         }}
       >
         <div style={{ textAlign: 'center', color: '#6B7280', fontWeight: 600 }}>
-          Loading Doctor Appointment Portal...
+          Loading Medicare Demo System...
         </div>
       </div>
     );
@@ -50,7 +49,6 @@ export const App = () => {
         <Router>
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
 
             <Route
               path="/"

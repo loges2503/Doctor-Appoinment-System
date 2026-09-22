@@ -91,23 +91,33 @@ export const Doctors = () => {
   });
 
   return (
-    <div className="doctors-page">
-      <div className="page-header">
+    <div className="doctors-page" id="doctors-page" data-testid="doctors-page">
+      <div className="page-header" id="doctors-header" data-testid="doctors-header">
         <div>
-          <h1 className="page-title">Doctor Directory</h1>
-          <p className="page-subtitle">Manage medical personnel, schedules, and availability statuses.</p>
+          <h1 className="page-title" id="doctors-title" data-testid="doctors-title">Doctor Directory</h1>
+          <p className="page-subtitle" id="doctors-subtitle" data-testid="doctors-subtitle">Manage medical personnel, schedules, and availability statuses.</p>
         </div>
-        <button className="btn btn-primary" onClick={handleOpenAddModal}>
+        <button
+          className="btn btn-primary"
+          id="add-doctor-btn"
+          data-testid="add-doctor-btn"
+          aria-label="Add New Doctor"
+          onClick={handleOpenAddModal}
+        >
           <FaPlus /> Add New Doctor
         </button>
       </div>
 
       {/* Filter & Search Bar */}
-      <div className="card filter-card">
+      <div className="card filter-card" id="doctors-filter-card" data-testid="doctors-filter-card">
         <div className="search-input-box">
           <FaSearch className="search-icon" />
           <input
             type="text"
+            id="search-doctor-input"
+            name="searchDoctor"
+            data-testid="search-doctor-input"
+            aria-label="Search Doctors"
             className="form-input search-field"
             placeholder="Search doctors by name or qualification..."
             value={searchTerm}
@@ -117,8 +127,12 @@ export const Doctors = () => {
 
         <div className="filters-group">
           <div className="filter-item">
-            <label className="filter-label">Specialization:</label>
+            <label className="filter-label" htmlFor="specialization-filter-select">Specialization:</label>
             <select
+              id="specialization-filter-select"
+              name="specializationFilter"
+              data-testid="specialization-filter-select"
+              aria-label="Filter by Specialization"
               className="form-select filter-select"
               value={selectedSpec}
               onChange={(e) => setSelectedSpec(e.target.value)}
@@ -133,8 +147,12 @@ export const Doctors = () => {
           </div>
 
           <div className="filter-item">
-            <label className="filter-label">Availability:</label>
+            <label className="filter-label" htmlFor="availability-filter-select">Availability:</label>
             <select
+              id="availability-filter-select"
+              name="availabilityFilter"
+              data-testid="availability-filter-select"
+              aria-label="Filter by Availability"
               className="form-select filter-select"
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
@@ -149,7 +167,7 @@ export const Doctors = () => {
 
       {/* Doctor Cards Grid */}
       {filteredDoctors.length === 0 ? (
-        <div className="card empty-state-card">
+        <div className="card empty-state-card" id="doctors-empty-state" data-testid="doctors-empty-state">
           <div className="empty-icon-wrapper">
             <FaUserMd />
           </div>
@@ -157,20 +175,25 @@ export const Doctors = () => {
           <p>Try adjusting your search query or filters.</p>
         </div>
       ) : (
-        <div className="doctors-grid">
+        <div className="doctors-grid" id="doctors-grid" data-testid="doctors-grid">
           {filteredDoctors.map((doctor) => (
-            <div className="card doctor-card" key={doctor.id}>
+            <div
+              className="card doctor-card"
+              key={doctor.id}
+              id={`doctor-card-${doctor.id}`}
+              data-testid={`doctor-card-${doctor.id}`}
+            >
               <div className="doctor-card-top">
                 <img src={doctor.image} alt={doctor.name} className="doctor-card-avatar" />
                 <div className="doctor-card-badge">
-                  <Badge status={doctor.status} />
+                  <Badge status={doctor.status} id={`badge-doctor-${doctor.id}`} />
                 </div>
               </div>
 
               <div className="doctor-card-body">
-                <h3 className="doctor-card-name">{doctor.name}</h3>
-                <span className="doctor-card-spec">{doctor.specialization}</span>
-                <p className="doctor-card-qual">{doctor.qualification}</p>
+                <h3 className="doctor-card-name" id={`doctor-name-${doctor.id}`}>{doctor.name}</h3>
+                <span className="doctor-card-spec" id={`doctor-spec-${doctor.id}`}>{doctor.specialization}</span>
+                <p className="doctor-card-qual" id={`doctor-qual-${doctor.id}`}>{doctor.qualification}</p>
 
                 <div className="doctor-meta-list">
                   <div className="meta-item">
@@ -197,11 +220,20 @@ export const Doctors = () => {
               </div>
 
               <div className="doctor-card-actions">
-                <button className="btn btn-outline btn-sm" onClick={() => handleOpenEditModal(doctor)}>
+                <button
+                  className="btn btn-outline btn-sm"
+                  id={`edit-doctor-btn-${doctor.id}`}
+                  data-testid={`edit-doctor-btn-${doctor.id}`}
+                  aria-label={`Edit ${doctor.name}`}
+                  onClick={() => handleOpenEditModal(doctor)}
+                >
                   <FaEdit /> Edit
                 </button>
                 <button
                   className="btn btn-outline btn-sm text-danger"
+                  id={`delete-doctor-btn-${doctor.id}`}
+                  data-testid={`delete-doctor-btn-${doctor.id}`}
+                  aria-label={`Delete ${doctor.name}`}
                   style={{ color: '#EF4444' }}
                   onClick={() => handleOpenDeleteModal(doctor)}
                 >
