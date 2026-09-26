@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
     const res = authenticateAdmin(username, password);
     if (res.success) {
       setAdmin(res.user);
-      notify.success(`Welcome back, ${res.user.fullName || res.user.name}! Logged in as ${res.user.role}.`, 'Login Success');
+      notify.success('Welcome back', 'Login Successful');
       return { success: true, user: res.user };
     } else {
       notify.error(res.message || 'Invalid Username or Password.', 'Invalid Login');

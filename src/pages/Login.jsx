@@ -108,56 +108,7 @@ export const Login = () => {
         </div>
 
         {/* Predefined Test Credentials Helper Card for Automation Testers */}
-        <div
-          className="test-credentials-card"
-          id="test-credentials-card"
-          data-testid="test-credentials-card"
-        >
-          <div className="credentials-card-title">
-            <FaKey /> Predefined Test Credentials (Click to Autofill):
-          </div>
-
-          <div className="credentials-chips-grid">
-            <button
-              type="button"
-              className="credential-chip"
-              id="credential-admin"
-              data-testid="credential-admin"
-              onClick={() => handleFillCredentials('admin', 'Admin@123')}
-            >
-              <FaUserShield className="chip-icon admin-icon" />
-              <div>
-                <strong>Admin:</strong> admin / Admin@123
-              </div>
-            </button>
-
-            <button
-              type="button"
-              className="credential-chip"
-              id="credential-doctor"
-              data-testid="credential-doctor"
-              onClick={() => handleFillCredentials('doctor', 'Doctor@123')}
-            >
-              <FaUserMd className="chip-icon doctor-icon" />
-              <div>
-                <strong>Doctor:</strong> doctor / Doctor@123
-              </div>
-            </button>
-
-            <button
-              type="button"
-              className="credential-chip"
-              id="credential-reception"
-              data-testid="credential-reception"
-              onClick={() => handleFillCredentials('reception', 'Reception@123')}
-            >
-              <FaClipboardList className="chip-icon reception-icon" />
-              <div>
-                <strong>Reception:</strong> reception / Reception@123
-              </div>
-            </button>
-          </div>
-        </div>
+       
 
         <form onSubmit={handleSubmit} className="login-form" id="login-form" data-testid="login-form" noValidate>
           <div className="form-group">
