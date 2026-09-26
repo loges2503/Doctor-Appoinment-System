@@ -10,7 +10,6 @@ import { Patients } from './pages/Patients';
 import { Appointments } from './pages/Appointments';
 import { Notifications } from './pages/Notifications';
 import { Profile } from './pages/Profile';
-import { DefectLog } from './pages/DefectLog';
 import './styles/globals.css';
 
 // Protected Route Guard
@@ -64,7 +63,6 @@ export const App = () => {
               <Route path="patients" element={<Patients />} />
               <Route path="appointments" element={<Appointments />} />
               <Route path="notifications" element={<Notifications />} />
-              <Route path="defects" element={<DefectLog />} />
               <Route path="profile" element={<Profile />} />
             </Route>
 

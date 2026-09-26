@@ -8,8 +8,7 @@ import {
   FaUserCog,
   FaShieldAlt,
   FaTimes,
-  FaBell,
-  FaBug
+  FaBell
 } from 'react-icons/fa';
 import './Sidebar.css';
 
@@ -44,12 +43,6 @@ export const Sidebar = ({ isOpen, onCloseMobile }) => {
       label: 'Notifications',
       icon: <FaBell />,
       id: 'nav-notifications'
-    },
-    {
-      path: '/defects',
-      label: 'Defect Log',
-      icon: <FaBug />,
-      id: 'nav-defects'
     },
     {
       path: '/profile',
